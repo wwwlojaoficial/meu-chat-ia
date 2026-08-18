@@ -1,56 +1,610 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🤖 Chatbot KZN</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>🛒 KZN MENU - Simulação de Compra</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: 'Segoe UI', sans-serif;
+            font-family: 'Segoe UI', system-ui, sans-serif;
             background: #0a0a0a;
+            color: #f1f5f9;
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
-            padding: 16px;
+            padding: 20px;
         }
         .container {
             width: 100%;
-            max-width: 800px;
+            max-width: 900px;
             background: #111;
             border-radius: 16px;
             border: 1px solid #1f1f1f;
-            padding: 20px;
+            padding: 30px;
             box-shadow: 0 10px 40px rgba(0,0,0,0.8);
         }
         .header {
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #1f1f1f;
+            padding-bottom: 20px;
         }
         .header h1 {
-            color: #f1f5f9;
-            font-size: 1.5rem;
+            font-size: 2rem;
+            background: linear-gradient(135deg, #dc2626, #7c3aed);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
         .header p {
-            color: #64748b;
-            font-size: 0.9rem;
+            color: #94a3b8;
+            margin-top: 5px;
         }
-        .elfsight-app-abcf1e20-f4ba-48ce-9c78-943fe0639a97 {
-            min-height: 500px;
+        .header .badge {
+            display: inline-block;
+            background: #22c55e;
+            color: #fff;
+            padding: 2px 12px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            margin-top: 5px;
+        }
+
+        /* ===== CHATBOT ÁREA ===== */
+        .chatbot-area {
+            background: #0a0a0a;
+            border-radius: 12px;
+            border: 1px solid #1f1f1f;
+            padding: 16px;
+            margin-bottom: 30px;
+            min-height: 300px;
+        }
+        .chatbot-area .label {
+            font-size: 0.7rem;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .chatbot-area .label i {
+            color: #7c3aed;
+        }
+
+        /* ===== PLANOS ===== */
+        .plans-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 16px;
+            margin: 20px 0;
+        }
+        .plan-card {
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+        .plan-card:hover {
+            border-color: #7c3aed;
+            transform: translateY(-4px);
+            box-shadow: 0 8px 30px rgba(124,58,237,0.15);
+        }
+        .plan-card.selected {
+            border-color: #dc2626;
+            box-shadow: 0 0 30px rgba(220,38,38,0.2);
+        }
+        .plan-card .icon {
+            font-size: 2rem;
+            margin-bottom: 8px;
+        }
+        .plan-card h3 {
+            font-size: 1rem;
+            color: #f1f5f9;
+        }
+        .plan-card .price {
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: #dc2626;
+            margin: 8px 0;
+        }
+        .plan-card .price small {
+            font-size: 0.7rem;
+            color: #94a3b8;
+            font-weight: 400;
+        }
+        .plan-card .features {
+            list-style: none;
+            font-size: 0.8rem;
+            color: #94a3b8;
+        }
+        .plan-card .features li {
+            padding: 4px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+        .plan-card .features li i {
+            color: #22c55e;
+        }
+
+        /* ===== CARRINHO ===== */
+        .cart-area {
+            background: #0a0a0a;
+            border-radius: 12px;
+            border: 1px solid #1f1f1f;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        .cart-area h3 {
+            color: #f1f5f9;
+            margin-bottom: 10px;
+        }
+        .cart-area h3 i {
+            color: #f59e0b;
+        }
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid #1a1a1a;
+        }
+        .cart-item .item-name {
+            color: #f1f5f9;
+        }
+        .cart-item .item-price {
+            color: #dc2626;
+            font-weight: 700;
+        }
+        .cart-total {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            font-weight: 700;
+            border-top: 2px solid #1f1f1f;
+            margin-top: 10px;
+        }
+        .cart-total .total-value {
+            color: #dc2626;
+            font-size: 1.2rem;
+        }
+        .empty-cart {
+            color: #94a3b8;
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        /* ===== BOTÕES ===== */
+        .btn {
+            padding: 10px 24px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #dc2626, #7c3aed);
+            color: #fff;
+            width: 100%;
+            justify-content: center;
+        }
+        .btn-primary:hover {
+            transform: scale(1.02);
+            box-shadow: 0 4px 30px rgba(124,58,237,0.3);
+        }
+        .btn-secondary {
+            background: #1a1a1a;
+            color: #f1f5f9;
+            border: 1px solid #2a2a2a;
+            width: 100%;
+            justify-content: center;
+        }
+        .btn-secondary:hover {
+            border-color: #7c3aed;
+        }
+        .btn-success {
+            background: #22c55e;
+            color: #fff;
+            width: 100%;
+            justify-content: center;
+        }
+        .btn-success:hover {
+            background: #16a34a;
+            transform: scale(1.02);
+        }
+        .btn-danger {
+            background: transparent;
+            color: #ef4444;
+            border: 1px solid #ef4444;
+            padding: 4px 12px;
+            font-size: 0.7rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .btn-danger:hover {
+            background: rgba(239,68,68,0.15);
+        }
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        /* ===== MODAL ===== */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(8px);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .modal-overlay.open {
+            display: flex;
+        }
+        .modal-content {
+            background: #111;
+            border: 1px solid #1f1f1f;
+            border-radius: 16px;
+            padding: 30px;
+            max-width: 420px;
+            width: 100%;
+            text-align: center;
+            animation: modalIn 0.3s ease;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.9);
+        }
+        @keyframes modalIn {
+            from { opacity: 0; transform: scale(0.9) translateY(20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        .modal-content .success-icon {
+            font-size: 4rem;
+            color: #22c55e;
+            margin-bottom: 10px;
+        }
+        .modal-content h2 {
+            color: #f1f5f9;
+            margin-bottom: 5px;
+        }
+        .modal-content p {
+            color: #94a3b8;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+        .modal-content .pix-key {
+            background: #0a0a0a;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #22c55e;
+            font-family: monospace;
+            color: #22c55e;
+            font-size: 0.9rem;
+            word-break: break-all;
+            margin: 10px 0;
+        }
+        .modal-content .btn-copy {
+            background: #7c3aed;
+            color: #fff;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.3s;
+            font-size: 0.85rem;
+        }
+        .modal-content .btn-copy:hover {
+            transform: scale(1.05);
+        }
+        .modal-content .close-modal {
+            margin-top: 15px;
+            background: transparent;
+            border: 1px solid #2a2a2a;
+            color: #94a3b8;
+            padding: 8px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 0.8rem;
+        }
+        .modal-content .close-modal:hover {
+            border-color: #ef4444;
+            color: #ef4444;
+        }
+
+        /* ===== RESPONSIVO ===== */
+        @media (max-width: 600px) {
+            .container { padding: 16px; }
+            .plans-grid { grid-template-columns: 1fr; }
+            .header h1 { font-size: 1.5rem; }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>🤖 Chatbot KZN</h1>
-            <p>Assistente virtual para tirar suas dúvidas</p>
-        </div>
 
+<div class="container">
+    <!-- HEADER -->
+    <div class="header">
+        <h1><i class="fas fa-crown" style="color:#f59e0b;"></i> KZN MENU</h1>
+        <p>Simulação de Compra - Mod Menu Graal</p>
+        <span class="badge"><i class="fas fa-check"></i> Simulação</span>
+    </div>
+
+    <!-- CHATBOT ÁREA -->
+    <div class="chatbot-area">
+        <div class="label">
+            <i class="fas fa-robot"></i> Assistente Virtual
+            <span style="margin-left:auto;font-size:0.6rem;color:#22c55e;"><i class="fas fa-circle"></i> Online</span>
+        </div>
         <!-- ELFSIGHT CHATBOT -->
         <script src="https://elfsightcdn.com/platform.js" async></script>
         <div class="elfsight-app-abcf1e20-f4ba-48ce-9c78-943fe0639a97" data-elfsight-app-lazy></div>
     </div>
+
+    <!-- PLANOS -->
+    <h3 style="margin-top:10px;color:#f1f5f9;"><i class="fas fa-cubes" style="color:#dc2626;"></i> Escolha seu Plano</h3>
+    <div class="plans-grid" id="plansGrid">
+        <!-- SIMPLE -->
+        <div class="plan-card" data-plan="SIMPLE" data-price="30" onclick="selecionarPlano(this)">
+            <div class="icon">🟡</div>
+            <h3>SIMPLE</h3>
+            <div class="price">R$ 30,00 <small>20 dias</small></div>
+            <ul class="features">
+                <li><i class="fas fa-check"></i> Acesso ao Mod Menu</li>
+                <li><i class="fas fa-check"></i> Key de ativação</li>
+            </ul>
+        </div>
+
+        <!-- BASIC -->
+        <div class="plan-card" data-plan="BASIC" data-price="50" onclick="selecionarPlano(this)">
+            <div class="icon">🟢</div>
+            <h3>BASIC</h3>
+            <div class="price">R$ 50,00 <small>35 dias</small></div>
+            <ul class="features">
+                <li><i class="fas fa-check"></i> Acesso ao Mod Menu</li>
+                <li><i class="fas fa-check"></i> Key de ativação</li>
+                <li><i class="fas fa-check"></i> Suporte ao cliente</li>
+            </ul>
+        </div>
+
+        <!-- PRO -->
+        <div class="plan-card" data-plan="PRO" data-price="150" onclick="selecionarPlano(this)">
+            <div class="icon">🟣</div>
+            <h3>PRO</h3>
+            <div class="price">R$ 150,00 <small>105 dias</small></div>
+            <ul class="features">
+                <li><i class="fas fa-check"></i> Acesso ao Mod Menu</li>
+                <li><i class="fas fa-check"></i> Key de ativação</li>
+                <li><i class="fas fa-check"></i> Suporte prioritário</li>
+            </ul>
+        </div>
+
+        <!-- PREMIUM -->
+        <div class="plan-card" data-plan="PREMIUM" data-price="200" onclick="selecionarPlano(this)">
+            <div class="icon">🔥</div>
+            <h3>PREMIUM</h3>
+            <div class="price">R$ 200,00 <small>140 dias</small></div>
+            <ul class="features">
+                <li><i class="fas fa-check"></i> Acesso ao Mod Menu</li>
+                <li><i class="fas fa-check"></i> Key de ativação</li>
+                <li><i class="fas fa-check"></i> Recursos premium</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- CARRINHO -->
+    <div class="cart-area">
+        <h3><i class="fas fa-shopping-cart"></i> Seu Carrinho</h3>
+        <div id="cartItems">
+            <div class="empty-cart">🛒 Nenhum item adicionado</div>
+        </div>
+        <div class="cart-total">
+            <span>Total:</span>
+            <span class="total-value" id="cartTotal">R$ 0,00</span>
+        </div>
+        <button class="btn btn-primary" onclick="finalizarCompra()">
+            <i class="fas fa-credit-card"></i> Finalizar Compra
+        </button>
+        <div class="btn-group">
+            <button class="btn btn-secondary" onclick="limparCarrinho()">
+                <i class="fas fa-trash"></i> Limpar
+            </button>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div style="text-align:center;margin-top:20px;font-size:0.7rem;color:#64748b;border-top:1px solid #1a1a1a;padding-top:15px;">
+        <i class="fas fa-shield-alt" style="color:#22c55e;"></i> Simulação de Compra - KZN MENU
+        <br>Chave PIX: <span style="font-family:monospace;color:#22c55e;">6c80021c-957b-49c0-9a5d-98371bf67120</span>
+    </div>
+</div>
+
+<!-- ===== MODAL DE PAGAMENTO ===== -->
+<div class="modal-overlay" id="modalPix">
+    <div class="modal-content">
+        <div class="success-icon">✅</div>
+        <h2>Pagamento Gerado!</h2>
+        <p>Copie a chave PIX abaixo e realize o pagamento:</p>
+        <div class="pix-key" id="pixKeyDisplay">6c80021c-957b-49c0-9a5d-98371bf67120</div>
+        <button class="btn-copy" onclick="copiarPix()"><i class="fas fa-copy"></i> Copiar Chave PIX</button>
+        <div style="margin:10px 0;font-size:0.8rem;color:#94a3b8;">
+            <strong>Produto:</strong> <span id="modalProduto">-</span><br>
+            <strong>Valor:</strong> <span id="modalValor">-</span>
+        </div>
+        <button class="close-modal" onclick="fecharModalPix()"><i class="fas fa-times"></i> Fechar</button>
+    </div>
+</div>
+
+<script>
+// ============================================
+// SIMULAÇÃO DE COMPRA - KZN MENU
+// ============================================
+
+let carrinho = [];
+let planoSelecionado = null;
+
+// ============================================
+// SELECIONAR PLANO
+// ============================================
+
+function selecionarPlano(element) {
+    // Remove seleção anterior
+    document.querySelectorAll('.plan-card').forEach(card => {
+        card.classList.remove('selected');
+    });
+    
+    // Adiciona seleção ao clicado
+    element.classList.add('selected');
+    
+    const nome = element.dataset.plan;
+    const preco = parseInt(element.dataset.price);
+    
+    planoSelecionado = { nome, preco };
+    
+    // Adiciona ao carrinho automaticamente
+    adicionarAoCarrinho(nome, preco);
+}
+
+// ============================================
+// CARRINHO
+// ============================================
+
+function adicionarAoCarrinho(nome, preco) {
+    // Verifica se já existe
+    const existente = carrinho.find(item => item.nome === nome);
+    if (existente) {
+        existente.quantidade++;
+    } else {
+        carrinho.push({ nome, preco, quantidade: 1 });
+    }
+    atualizarCarrinho();
+}
+
+function removerDoCarrinho(index) {
+    carrinho.splice(index, 1);
+    atualizarCarrinho();
+}
+
+function limparCarrinho() {
+    if (carrinho.length === 0) return;
+    if (!confirm('Tem certeza que deseja limpar o carrinho?')) return;
+    carrinho = [];
+    planoSelecionado = null;
+    document.querySelectorAll('.plan-card').forEach(card => {
+        card.classList.remove('selected');
+    });
+    atualizarCarrinho();
+}
+
+function atualizarCarrinho() {
+    const container = document.getElementById('cartItems');
+    const totalContainer = document.getElementById('cartTotal');
+    
+    if (carrinho.length === 0) {
+        container.innerHTML = `<div class="empty-cart">🛒 Nenhum item adicionado</div>`;
+        totalContainer.textContent = 'R$ 0,00';
+        return;
+    }
+    
+    let html = '';
+    let total = 0;
+    
+    carrinho.forEach((item, index) => {
+        const subtotal = item.preco * item.quantidade;
+        total += subtotal;
+        html += `
+            <div class="cart-item">
+                <span class="item-name">${item.nome} x${item.quantidade}</span>
+                <span class="item-price">R$ ${subtotal.toFixed(2)}</span>
+                <button class="btn-danger" onclick="removerDoCarrinho(${index})">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        `;
+    });
+    
+    container.innerHTML = html;
+    totalContainer.textContent = `R$ ${total.toFixed(2)}`;
+}
+
+// ============================================
+// FINALIZAR COMPRA
+// ============================================
+
+function finalizarCompra() {
+    if (carrinho.length === 0) {
+        alert('🛒 Seu carrinho está vazio! Selecione um plano primeiro.');
+        return;
+    }
+    
+    const total = carrinho.reduce((sum, item) => sum + (item.preco * item.quantidade), 0);
+    const produtos = carrinho.map(item => item.nome).join(', ');
+    
+    // Abre modal com os dados
+    document.getElementById('modalProduto').textContent = produtos;
+    document.getElementById('modalValor').textContent = `R$ ${total.toFixed(2)}`;
+    document.getElementById('modalPix').classList.add('open');
+}
+
+function fecharModalPix() {
+    document.getElementById('modalPix').classList.remove('open');
+}
+
+function copiarPix() {
+    const key = document.getElementById('pixKeyDisplay').textContent;
+    navigator.clipboard.writeText(key).then(() => {
+        const btn = document.querySelector('.btn-copy');
+        const original = btn.innerHTML;
+        btn.innerHTML = '<i class="fas fa-check"></i> Copiado!';
+        setTimeout(() => { btn.innerHTML = original; }, 2000);
+    }).catch(() => {
+        alert('📋 Chave PIX: ' + key);
+    });
+}
+
+// ============================================
+// CLIQUE FORA DO MODAL PARA FECHAR
+// ============================================
+
+document.getElementById('modalPix').addEventListener('click', function(e) {
+    if (e.target === this) {
+        fecharModalPix();
+    }
+});
+
+// ============================================
+// ATALHO TECLADO
+// ============================================
+
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        fecharModalPix();
+    }
+});
+
+console.log('🛒 KZN MENU - Simulação de Compra carregada!');
+console.log('📌 Selecione um plano para adicionar ao carrinho.');
+</script>
 </body>
 </html>
