@@ -3,389 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🤖 Chat IA - KeylessAI</title>
+    <title>🤖 Chatbot KZN</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Segoe UI', sans-serif;
             background: #0a0a0a;
-            color: #f1f5f9;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
             padding: 16px;
         }
-        .chat-container {
+        .container {
             width: 100%;
-            max-width: 500px;
+            max-width: 800px;
             background: #111;
             border-radius: 16px;
             border: 1px solid #1f1f1f;
-            overflow: hidden;
+            padding: 20px;
             box-shadow: 0 10px 40px rgba(0,0,0,0.8);
         }
-        .chat-header {
-            background: linear-gradient(135deg, #dc2626, #7c3aed);
-            padding: 16px 20px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        .chat-header h1 {
-            font-size: 1.2rem;
-            font-weight: 700;
-        }
-        .chat-header .status {
-            font-size: 0.7rem;
-            opacity: 0.7;
-            margin-left: auto;
-        }
-        .chat-messages {
-            height: 400px;
-            overflow-y: auto;
-            padding: 16px;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            background: #0f0f0f;
-        }
-        .chat-messages::-webkit-scrollbar { width: 6px; }
-        .chat-messages::-webkit-scrollbar-thumb {
-            background: #7c3aed;
-            border-radius: 10px;
-        }
-        .msg {
-            max-width: 85%;
-            padding: 10px 14px;
-            border-radius: 12px;
-            font-size: 0.9rem;
-            line-height: 1.5;
-            animation: fadeIn 0.3s ease;
-        }
-        .msg.user {
-            align-self: flex-end;
-            background: linear-gradient(135deg, #dc2626, #7c3aed);
-            color: #fff;
-            border-bottom-right-radius: 4px;
-        }
-        .msg.bot {
-            align-self: flex-start;
-            background: #1a1a2e;
-            border: 1px solid #2a2a4a;
-            border-bottom-left-radius: 4px;
-        }
-        .msg .nome {
-            font-size: 0.6rem;
-            opacity: 0.5;
-            margin-bottom: 2px;
-        }
-        .msg .hora {
-            font-size: 0.55rem;
-            opacity: 0.3;
-            margin-top: 4px;
-            text-align: right;
-        }
-        .msg.error {
-            align-self: center;
-            background: rgba(239,68,68,0.15);
-            border: 1px solid #ef4444;
-            color: #ef4444;
+        .header {
             text-align: center;
-            font-size: 0.8rem;
+            margin-bottom: 20px;
         }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(8px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .typing {
-            align-self: flex-start;
-            padding: 10px 14px;
-            background: #1a1a2e;
-            border-radius: 12px;
-            border: 1px solid #2a2a4a;
-            display: none;
-        }
-        .typing.show { display: block; }
-        .typing span {
-            display: inline-block;
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: #7c3aed;
-            margin: 0 2px;
-            animation: dotPulse 1.4s infinite;
-        }
-        .typing span:nth-child(2) { animation-delay: 0.2s; }
-        .typing span:nth-child(3) { animation-delay: 0.4s; }
-        @keyframes dotPulse {
-            0%, 60%, 100% { transform: scale(0.4); opacity: 0.4; }
-            30% { transform: scale(1); opacity: 1; }
-        }
-        .chat-input {
-            display: flex;
-            gap: 8px;
-            padding: 12px 16px;
-            background: #0a0a0a;
-            border-top: 1px solid #1f1f1f;
-        }
-        .chat-input input {
-            flex: 1;
-            padding: 10px 14px;
-            background: #1a1a1a;
-            border: 1px solid #2a2a2a;
-            border-radius: 10px;
+        .header h1 {
             color: #f1f5f9;
-            font-size: 0.9rem;
-            outline: none;
-            transition: 0.3s;
+            font-size: 1.5rem;
         }
-        .chat-input input:focus {
-            border-color: #7c3aed;
-            box-shadow: 0 0 20px rgba(124,58,237,0.1);
-        }
-        .chat-input input:disabled {
-            opacity: 0.5;
-        }
-        .chat-input button {
-            padding: 10px 18px;
-            background: linear-gradient(135deg, #dc2626, #7c3aed);
-            color: #fff;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: 0.3s;
+        .header p {
+            color: #64748b;
             font-size: 0.9rem;
         }
-        .chat-input button:hover {
-            transform: scale(1.02);
-            box-shadow: 0 4px 20px rgba(124,58,237,0.3);
-        }
-        .chat-input button:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-        .api-status {
-            text-align: center;
-            padding: 6px;
-            font-size: 0.65rem;
-            color: #64748b;
-            background: #0a0a0a;
-            border-top: 1px solid #1a1a1a;
-        }
-        .clear-btn {
-            background: transparent;
-            border: 1px solid #2a2a2a;
-            color: #64748b;
-            padding: 4px 12px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 0.7rem;
-            transition: 0.3s;
-        }
-        .clear-btn:hover {
-            border-color: #ef4444;
-            color: #ef4444;
-        }
-        @media (max-width: 480px) {
-            .chat-container { max-width: 100%; }
-            .chat-messages { height: 350px; }
+        .elfsight-app-abcf1e20-f4ba-48ce-9c78-943fe0639a97 {
+            min-height: 500px;
         }
     </style>
 </head>
 <body>
-
-<div class="chat-container">
-    <div class="chat-header">
-        <h1>🤖 Chat IA</h1>
-        <span style="font-size:0.7rem;opacity:0.5;">KEYLESS</span>
-        <span class="status" id="statusApi">🔄 Carregando...</span>
-    </div>
-
-    <div class="chat-messages" id="chatMessages">
-        <div class="msg bot">
-            <div class="nome">🤖 IA</div>
-            Olá! Sou uma IA gratuita.<br>
-            Digite algo para começar! 🚀
-            <div class="hora">Agora</div>
+    <div class="container">
+        <div class="header">
+            <h1>🤖 Chatbot KZN</h1>
+            <p>Assistente virtual para tirar suas dúvidas</p>
         </div>
+
+        <!-- ELFSIGHT CHATBOT -->
+        <script src="https://elfsightcdn.com/platform.js" async></script>
+        <div class="elfsight-app-abcf1e20-f4ba-48ce-9c78-943fe0639a97" data-elfsight-app-lazy></div>
     </div>
-
-    <div class="typing" id="typingIndicator">
-        <span></span><span></span><span></span>
-    </div>
-
-    <div class="chat-input">
-        <input type="text" id="chatInput" placeholder="Digite sua mensagem..." />
-        <button id="sendBtn" onclick="enviarMensagem()">Enviar</button>
-    </div>
-
-    <div class="api-status">
-        <span id="apiStatusText">🔌 Conectando à API...</span>
-        <button class="clear-btn" onclick="limparChat()">🗑️ Limpar</button>
-    </div>
-</div>
-
-<script>
-// ============================================
-// KEYLESSAI - GRÁTIS SEM CHAVE (COM CORS BYPASS)
-// ============================================
-
-// 📌 KEYLESSAI - usando proxy CORS
-const KEYLESS_URL = 'https://cors-anywhere.herokuapp.com/https://keylessai.thryx.workers.dev/v1/chat/completions';
-
-// ============================================
-// ESTADO
-// ============================================
-let historico = [];
-let isLoading = false;
-let ultimaRequisicao = 0;
-
-// ============================================
-// FUNÇÕES PRINCIPAIS
-// ============================================
-
-function enviarMensagem() {
-    const input = document.getElementById('chatInput');
-    const msg = input.value.trim();
-    if (!msg || isLoading) return;
-
-    adicionarMensagem('user', msg);
-    input.value = '';
-    isLoading = true;
-
-    document.getElementById('typingIndicator').classList.add('show');
-    document.getElementById('sendBtn').disabled = true;
-    document.getElementById('chatInput').disabled = true;
-
-    enviarParaIA(msg);
-}
-
-function adicionarMensagem(tipo, texto) {
-    const container = document.getElementById('chatMessages');
-    const div = document.createElement('div');
-    div.className = `msg ${tipo}`;
-
-    const agora = new Date();
-    const hora = agora.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-    const nome = tipo === 'user' ? '👤 Você' : '🤖 IA';
-
-    div.innerHTML = `
-        <div class="nome">${nome}</div>
-        ${texto}
-        <div class="hora">${hora}</div>
-    `;
-
-    container.appendChild(div);
-    container.scrollTop = container.scrollHeight;
-}
-
-function adicionarMensagemError(texto) {
-    const container = document.getElementById('chatMessages');
-    const div = document.createElement('div');
-    div.className = 'msg error';
-    div.textContent = '❌ ' + texto;
-    container.appendChild(div);
-    container.scrollTop = container.scrollHeight;
-}
-
-// ============================================
-// ENVIAR PARA KEYLESSAI
-// ============================================
-
-async function enviarParaIA(mensagem) {
-    try {
-        // Delay de 3 segundos entre requisições
-        const agora = Date.now();
-        const tempoEspera = Math.max(0, 3000 - (agora - ultimaRequisicao));
-        if (tempoEspera > 0) {
-            await new Promise(resolve => setTimeout(resolve, tempoEspera));
-        }
-        ultimaRequisicao = Date.now();
-
-        const response = await fetch(KEYLESS_URL, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Origin': window.location.origin,
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
-            },
-            body: JSON.stringify({
-                model: 'gpt-4o',
-                messages: [
-                    { role: 'system', content: 'Você é um assistente útil e amigável. Responda em português.' },
-                    ...historico
-                ],
-                max_tokens: 500,
-                temperature: 0.7
-            })
-        });
-
-        if (!response.ok) {
-            const erro = await response.text();
-            throw new Error(`KeylessAI: ${response.status} - ${erro}`);
-        }
-
-        const data = await response.json();
-        const resposta = data.choices[0].message.content;
-
-        historico.push({ role: 'user', content: mensagem });
-        historico.push({ role: 'assistant', content: resposta });
-
-        document.getElementById('typingIndicator').classList.remove('show');
-        adicionarMensagem('bot', resposta);
-
-    } catch (error) {
-        document.getElementById('typingIndicator').classList.remove('show');
-        adicionarMensagemError('Erro: ' + error.message + '\nTente novamente em alguns segundos.');
-    } finally {
-        isLoading = false;
-        document.getElementById('sendBtn').disabled = false;
-        document.getElementById('chatInput').disabled = false;
-        document.getElementById('chatInput').focus();
-    }
-}
-
-// ============================================
-// UTILITÁRIOS
-// ============================================
-
-function limparChat() {
-    const container = document.getElementById('chatMessages');
-    container.innerHTML = '';
-    historico = [];
-
-    const msgBoasVindas = document.createElement('div');
-    msgBoasVindas.className = 'msg bot';
-    msgBoasVindas.innerHTML = `
-        <div class="nome">🤖 IA</div>
-        Chat limpo! Digite algo para começar. 🚀
-        <div class="hora">Agora</div>
-    `;
-    container.appendChild(msgBoasVindas);
-}
-
-function atualizarStatusApi(texto) {
-    document.getElementById('apiStatusText').textContent = texto;
-}
-
-// ============================================
-// EVENTOS
-// ============================================
-
-document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('chatInput').addEventListener('keydown', function(e) {
-        if (e.key === 'Enter') enviarMensagem();
-    });
-
-    atualizarStatusApi('✅ Pronto para usar! (KeylessAI)');
-    document.getElementById('statusApi').textContent = '✅ Online';
-});
-
-console.log('🤖 Chat IA carregado!');
-console.log('📌 Modelo: KeylessAI (100% grátis, com bypass CORS)');
-console.log('⏳ Delay de 3s entre mensagens para evitar bloqueios');
-</script>
 </body>
 </html>
