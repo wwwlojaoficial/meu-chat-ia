@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🤖 Chat IA - Pollinations</title>
+    <title>🤖 Chat IA - KeylessAI</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -188,32 +188,6 @@
             border-color: #ef4444;
             color: #ef4444;
         }
-        .model-selector {
-            display: flex;
-            gap: 4px;
-            padding: 4px 16px;
-            background: #0a0a0a;
-            border-top: 1px solid #1a1a1a;
-            flex-wrap: wrap;
-        }
-        .model-selector button {
-            padding: 4px 12px;
-            background: transparent;
-            border: 1px solid #2a2a2a;
-            border-radius: 6px;
-            color: #64748b;
-            cursor: pointer;
-            font-size: 0.65rem;
-            transition: 0.3s;
-        }
-        .model-selector button.active {
-            border-color: #7c3aed;
-            color: #a78bfa;
-            background: rgba(124,58,237,0.1);
-        }
-        .model-selector button:hover {
-            border-color: #7c3aed;
-        }
         @media (max-width: 480px) {
             .chat-container { max-width: 100%; }
             .chat-messages { height: 350px; }
@@ -225,7 +199,7 @@
 <div class="chat-container">
     <div class="chat-header">
         <h1>🤖 Chat IA</h1>
-        <span style="font-size:0.7rem;opacity:0.5;">POLLINATIONS</span>
+        <span style="font-size:0.7rem;opacity:0.5;">KEYLESS</span>
         <span class="status" id="statusApi">🔄 Carregando...</span>
     </div>
 
@@ -255,17 +229,18 @@
 
 <script>
 // ============================================
-// POLLINATIONS - API GRATUITA SEM CHAVE!
+// KEYLESSAI - GRÁTIS SEM CHAVE (COM CORS BYPASS)
 // ============================================
 
-// 📌 POLLINATIONS - Sistema de Chat
-const POLLINATIONS_URL = 'https://text.pollinations.ai/';
+// 📌 KEYLESSAI - usando proxy CORS
+const KEYLESS_URL = 'https://cors-anywhere.herokuapp.com/https://keylessai.thryx.workers.dev/v1/chat/completions';
 
 // ============================================
 // ESTADO
 // ============================================
 let historico = [];
 let isLoading = false;
+let ultimaRequisicao = 0;
 
 // ============================================
 // FUNÇÕES PRINCIPAIS
@@ -316,23 +291,45 @@ function adicionarMensagemError(texto) {
 }
 
 // ============================================
-// ENVIAR PARA POLLINATIONS
+// ENVIAR PARA KEYLESSAI
 // ============================================
 
 async function enviarParaIA(mensagem) {
     try {
-        // Formato correto para o Pollinations
-        const url = `${POLLINATIONS_URL}${encodeURIComponent(mensagem)}?model=pollinations&seed=${Date.now()}`;
-        
-        const response = await fetch(url);
-        
+        // Delay de 3 segundos entre requisições
+        const agora = Date.now();
+        const tempoEspera = Math.max(0, 3000 - (agora - ultimaRequisicao));
+        if (tempoEspera > 0) {
+            await new Promise(resolve => setTimeout(resolve, tempoEspera));
+        }
+        ultimaRequisicao = Date.now();
+
+        const response = await fetch(KEYLESS_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Origin': window.location.origin,
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+            },
+            body: JSON.stringify({
+                model: 'gpt-4o',
+                messages: [
+                    { role: 'system', content: 'Você é um assistente útil e amigável. Responda em português.' },
+                    ...historico
+                ],
+                max_tokens: 500,
+                temperature: 0.7
+            })
+        });
+
         if (!response.ok) {
-            throw new Error(`Pollinations: ${response.status}`);
+            const erro = await response.text();
+            throw new Error(`KeylessAI: ${response.status} - ${erro}`);
         }
 
-        const resposta = await response.text();
+        const data = await response.json();
+        const resposta = data.choices[0].message.content;
 
-        // Salva no histórico
         historico.push({ role: 'user', content: mensagem });
         historico.push({ role: 'assistant', content: resposta });
 
@@ -341,7 +338,7 @@ async function enviarParaIA(mensagem) {
 
     } catch (error) {
         document.getElementById('typingIndicator').classList.remove('show');
-        adicionarMensagemError('Erro: ' + error.message);
+        adicionarMensagemError('Erro: ' + error.message + '\nTente novamente em alguns segundos.');
     } finally {
         isLoading = false;
         document.getElementById('sendBtn').disabled = false;
@@ -382,12 +379,13 @@ document.addEventListener('DOMContentLoaded', function() {
         if (e.key === 'Enter') enviarMensagem();
     });
 
-    atualizarStatusApi('✅ Pronto para usar! (Pollinations)');
+    atualizarStatusApi('✅ Pronto para usar! (KeylessAI)');
     document.getElementById('statusApi').textContent = '✅ Online';
 });
 
 console.log('🤖 Chat IA carregado!');
-console.log('📌 Modelo: Pollinations (100% grátis, sem chave!)');
+console.log('📌 Modelo: KeylessAI (100% grátis, com bypass CORS)');
+console.log('⏳ Delay de 3s entre mensagens para evitar bloqueios');
 </script>
 </body>
 </html>
