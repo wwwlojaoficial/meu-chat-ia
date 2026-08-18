@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🤖 Chat IA - KeylessAI</title>
+    <title>🤖 Chat IA - Pollinations</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -188,32 +188,6 @@
             border-color: #ef4444;
             color: #ef4444;
         }
-        .model-selector {
-            display: flex;
-            gap: 4px;
-            padding: 4px 16px;
-            background: #0a0a0a;
-            border-top: 1px solid #1a1a1a;
-            flex-wrap: wrap;
-        }
-        .model-selector button {
-            padding: 4px 12px;
-            background: transparent;
-            border: 1px solid #2a2a2a;
-            border-radius: 6px;
-            color: #64748b;
-            cursor: pointer;
-            font-size: 0.65rem;
-            transition: 0.3s;
-        }
-        .model-selector button.active {
-            border-color: #7c3aed;
-            color: #a78bfa;
-            background: rgba(124,58,237,0.1);
-        }
-        .model-selector button:hover {
-            border-color: #7c3aed;
-        }
         @media (max-width: 480px) {
             .chat-container { max-width: 100%; }
             .chat-messages { height: 350px; }
@@ -225,14 +199,14 @@
 <div class="chat-container">
     <div class="chat-header">
         <h1>🤖 Chat IA</h1>
-        <span style="font-size:0.7rem;opacity:0.5;">KEYLESS</span>
+        <span style="font-size:0.7rem;opacity:0.5;">POLLINATIONS</span>
         <span class="status" id="statusApi">🔄 Carregando...</span>
     </div>
 
     <div class="chat-messages" id="chatMessages">
         <div class="msg bot">
             <div class="nome">🤖 IA</div>
-            Olá! Sou uma IA gratuita (KeylessAI).<br>
+            Olá! Sou uma IA gratuita.<br>
             Digite algo para começar! 🚀
             <div class="hora">Agora</div>
         </div>
@@ -240,11 +214,6 @@
 
     <div class="typing" id="typingIndicator">
         <span></span><span></span><span></span>
-    </div>
-
-    <div class="model-selector">
-        <button class="active" data-model="keyless">KeylessAI</button>
-        <button data-model="deepseek">DeepSeek</button>
     </div>
 
     <div class="chat-input">
@@ -260,20 +229,15 @@
 
 <script>
 // ============================================
-// CONFIGURAÇÃO DA KEYLESSAI (GRÁTIS - SEM CHAVE!)
+// POLLINATIONS - API GRATUITA SEM CHAVE!
 // ============================================
 
-// 📌 KEYLESSAI - API GRATUITA SEM CHAVE
-const KEYLESS_URL = 'https://keylessai.thryx.workers.dev/v1/chat/completions';
-
-// 📌 DEEPSEEK (opcional - precisa de chave)
-const DEEPSEEK_KEY = 'sk-20e41d2254484a9d8dfb0679cdc7c79e';
-const DEEPSEEK_URL = 'https://api.deepseek.com/v1/chat/completions';
+// 📌 POLLINATIONS - FUNCIONA DIRETO DO NAVEGADOR!
+const POLLINATIONS_URL = 'https://text.pollinations.ai/';
 
 // ============================================
 // ESTADO
 // ============================================
-let modeloAtual = 'keyless';
 let historico = [];
 let isLoading = false;
 
@@ -326,26 +290,24 @@ function adicionarMensagemError(texto) {
 }
 
 // ============================================
-// ENVIAR PARA IA
+// ENVIAR PARA POLLINATIONS
 // ============================================
 
 async function enviarParaIA(mensagem) {
     try {
-        let resposta = '';
-
-        historico.push({ role: 'user', content: mensagem });
-
-        switch (modeloAtual) {
-            case 'keyless':
-                resposta = await chamarKeyless(mensagem);
-                break;
-            case 'deepseek':
-                resposta = await chamarDeepSeek(mensagem);
-                break;
-            default:
-                resposta = '⚠️ Modelo não configurado.';
+        // A API do Pollinations é simples: só enviar a pergunta na URL
+        const url = `${POLLINATIONS_URL}${encodeURIComponent(mensagem)}?seed=${Date.now()}`;
+        
+        const response = await fetch(url);
+        
+        if (!response.ok) {
+            throw new Error(`Pollinations: ${response.status}`);
         }
 
+        const resposta = await response.text();
+
+        // Salva no histórico
+        historico.push({ role: 'user', content: mensagem });
         historico.push({ role: 'assistant', content: resposta });
 
         document.getElementById('typingIndicator').classList.remove('show');
@@ -360,67 +322,6 @@ async function enviarParaIA(mensagem) {
         document.getElementById('chatInput').disabled = false;
         document.getElementById('chatInput').focus();
     }
-}
-
-// ============================================
-// KEYLESSAI API (100% GRÁTIS - SEM CHAVE!)
-// ============================================
-
-async function chamarKeyless(mensagem) {
-    const response = await fetch(KEYLESS_URL, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            model: 'gpt-4o',
-            messages: [
-                { role: 'system', content: 'Você é um assistente útil e amigável.' },
-                ...historico
-            ],
-            max_tokens: 500,
-            temperature: 0.7
-        })
-    });
-
-    if (!response.ok) {
-        const erro = await response.text();
-        throw new Error(`KeylessAI: ${response.status} - ${erro}`);
-    }
-
-    const data = await response.json();
-    return data.choices[0].message.content;
-}
-
-// ============================================
-// DEEPSEEK API (opcional)
-// ============================================
-
-async function chamarDeepSeek(mensagem) {
-    const response = await fetch(DEEPSEEK_URL, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${DEEPSEEK_KEY}`
-        },
-        body: JSON.stringify({
-            model: 'deepseek-chat',
-            messages: [
-                { role: 'system', content: 'Você é um assistente útil e amigável.' },
-                ...historico
-            ],
-            max_tokens: 500,
-            temperature: 0.7
-        })
-    });
-
-    if (!response.ok) {
-        const erro = await response.text();
-        throw new Error(`DeepSeek: ${response.status} - ${erro}`);
-    }
-
-    const data = await response.json();
-    return data.choices[0].message.content;
 }
 
 // ============================================
@@ -442,14 +343,6 @@ function limparChat() {
     container.appendChild(msgBoasVindas);
 }
 
-function trocarModelo(modelo) {
-    modeloAtual = modelo;
-    document.querySelectorAll('.model-selector button').forEach(btn => {
-        btn.classList.toggle('active', btn.dataset.model === modelo);
-    });
-    atualizarStatusApi(`📡 Modelo: ${modelo.toUpperCase()}`);
-}
-
 function atualizarStatusApi(texto) {
     document.getElementById('apiStatusText').textContent = texto;
 }
@@ -463,18 +356,12 @@ document.addEventListener('DOMContentLoaded', function() {
         if (e.key === 'Enter') enviarMensagem();
     });
 
-    document.querySelectorAll('.model-selector button').forEach(btn => {
-        btn.addEventListener('click', function() {
-            trocarModelo(this.dataset.model);
-        });
-    });
-
-    atualizarStatusApi('✅ Pronto para usar! (KeylessAI)');
+    atualizarStatusApi('✅ Pronto para usar! (Pollinations)');
     document.getElementById('statusApi').textContent = '✅ Online';
 });
 
 console.log('🤖 Chat IA carregado!');
-console.log('📌 Modelo: KeylessAI (100% grátis, sem chave!)');
+console.log('📌 Modelo: Pollinations (100% grátis, sem chave, sem CORS!)');
 </script>
 </body>
 </html>
