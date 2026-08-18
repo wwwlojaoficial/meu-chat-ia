@@ -188,6 +188,32 @@
             border-color: #ef4444;
             color: #ef4444;
         }
+        .model-selector {
+            display: flex;
+            gap: 4px;
+            padding: 4px 16px;
+            background: #0a0a0a;
+            border-top: 1px solid #1a1a1a;
+            flex-wrap: wrap;
+        }
+        .model-selector button {
+            padding: 4px 12px;
+            background: transparent;
+            border: 1px solid #2a2a2a;
+            border-radius: 6px;
+            color: #64748b;
+            cursor: pointer;
+            font-size: 0.65rem;
+            transition: 0.3s;
+        }
+        .model-selector button.active {
+            border-color: #7c3aed;
+            color: #a78bfa;
+            background: rgba(124,58,237,0.1);
+        }
+        .model-selector button:hover {
+            border-color: #7c3aed;
+        }
         @media (max-width: 480px) {
             .chat-container { max-width: 100%; }
             .chat-messages { height: 350px; }
@@ -232,7 +258,7 @@
 // POLLINATIONS - API GRATUITA SEM CHAVE!
 // ============================================
 
-// 📌 POLLINATIONS - FUNCIONA DIRETO DO NAVEGADOR!
+// 📌 POLLINATIONS - Sistema de Chat
 const POLLINATIONS_URL = 'https://text.pollinations.ai/';
 
 // ============================================
@@ -295,8 +321,8 @@ function adicionarMensagemError(texto) {
 
 async function enviarParaIA(mensagem) {
     try {
-        // A API do Pollinations é simples: só enviar a pergunta na URL
-        const url = `${POLLINATIONS_URL}${encodeURIComponent(mensagem)}?seed=${Date.now()}`;
+        // Formato correto para o Pollinations
+        const url = `${POLLINATIONS_URL}${encodeURIComponent(mensagem)}?model=pollinations&seed=${Date.now()}`;
         
         const response = await fetch(url);
         
@@ -361,7 +387,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 console.log('🤖 Chat IA carregado!');
-console.log('📌 Modelo: Pollinations (100% grátis, sem chave, sem CORS!)');
+console.log('📌 Modelo: Pollinations (100% grátis, sem chave!)');
 </script>
 </body>
 </html>
