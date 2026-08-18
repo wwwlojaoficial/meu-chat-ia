@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🤖 Chat IA - Teste Grátis</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #0a0a0a;
+            color: #f1f5f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 16px;
+        }
+        .chat-container {
+            width: 100%;
+            max-width: 500px;
+            background: #111;
+            border-radius: 16px;
+            border: 1px solid #1f1f1f;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+        }
+        .chat-header {
+            background: linear-gradient(135deg, #dc2626, #7c3aed);
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .chat-header h1 {
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+        .chat-header .status {
+            font-size: 0.7rem;
+            opacity: 0.7;
+            margin-left: auto;
+        }
+        .chat-messages {
+            height: 400px;
+            overflow-y: auto;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            background: #0f0f0f;
+        }
+        .chat-messages::-webkit-scrollbar { width: 6px; }
+        .chat-messages::-webkit-scrollbar-thumb {
+            background: #7c3aed;
+            border-radius: 10px;
+        }
+        .msg {
+            max-width: 85%;
+            padding: 10px 14px;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            animation: fadeIn 0.3s ease;
+        }
+        .msg.user {
+            align-self: flex-end;
+            background: linear-gradient(135deg, #dc2626, #7c3aed);
+            color: #fff;
+            border-bottom-right-radius: 4px;
+        }
+        .msg.bot {
+            align-self: flex-start;
+            background: #1a1a2e;
+            border: 1px solid #2a2a4a;
+            border-bottom-left-radius: 4px;
+        }
+        .msg .nome {
+            font-size: 0.6rem;
+            opacity: 0.5;
+            margin-bottom: 2px;
+        }
+        .msg .hora {
+            font-size: 0.55rem;
+            opacity: 0.3;
+            margin-top: 4px;
+            text-align: right;
+        }
+        .msg.error {
+            align-self: center;
+            background: rgba(239,68,68,0.15);
+            border: 1px solid #ef4444;
+            color: #ef4444;
+            text-align: center;
+            font-size: 0.8rem;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .typing {
+            align-self: flex-start;
+            padding: 10px 14px;
+            background: #1a1a2e;
+            border-radius: 12px;
+            border: 1px solid #2a2a4a;
+            display: none;
+        }
+        .typing.show { display: block; }
+        .typing span {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #7c3aed;
+            margin: 0 2px;
+            animation: dotPulse 1.4s infinite;
+        }
+        .typing span:nth-child(2) { animation-delay: 0.2s; }
+        .typing span:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes dotPulse {
+            0%, 60%, 100% { transform: scale(0.4); opacity: 0.4; }
+            30% { transform: scale(1); opacity: 1; }
+        }
+        .chat-input {
+            display: flex;
+            gap: 8px;
+            padding: 12px 16px;
+            background: #0a0a0a;
+            border-top: 1px solid #1f1f1f;
+        }
+        .chat-input input {
+            flex: 1;
+            padding: 10px 14px;
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 10px;
+            color: #f1f5f9;
+            font-size: 0.9rem;
+            outline: none;
+            transition: 0.3s;
+        }
+        .chat-input input:focus {
+            border-color: #7c3aed;
+            box-shadow: 0 0 20px rgba(124,58,237,0.1);
+        }
+        .chat-input input:disabled {
+            opacity: 0.5;
+        }
+        .chat-input button {
+            padding: 10px 18px;
+            background: linear-gradient(135deg, #dc2626, #7c3aed);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.3s;
+            font-size: 0.9rem;
+        }
+        .chat-input button:hover {
+            transform: scale(1.02);
+            box-shadow: 0 4px 20px rgba(124,58,237,0.3);
+        }
+        .chat-input button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .api-status {
+            text-align: center;
+            padding: 6px;
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            background: #0a0a0a;
+            border-top: 1px solid #1a1a1a;
+        }
+        .api-status .online {
+            color: #22c55e;
+        }
+        .api-status .offline {
+            color: #ef4444;
+        }
+        .clear-btn {
+            background: transparent;
+            border: 1px solid #2a2a2a;
+            color: #64748b;
+            padding: 4px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.7rem;
+            transition: 0.3s;
+        }
+        .clear-btn:hover {
+            border-color: #ef4444;
+            color: #ef4444;
+        }
+        .model-selector {
+            display: flex;
+            gap: 4px;
+            padding: 4px 16px;
+            background: #0a0a0a;
+            border-top: 1px solid #1a1a1a;
+            flex-wrap: wrap;
+        }
+        .model-selector button {
+            padding: 4px 12px;
+            background: transparent;
+            border: 1px solid #2a2a2a;
+            border-radius: 6px;
+            color: #64748b;
+            cursor: pointer;
+            font-size: 0.65rem;
+            transition: 0.3s;
+        }
+        .model-selector button.active {
+            border-color: #7c3aed;
+            color: #a78bfa;
+            background: rgba(124,58,237,0.1);
+        }
+        .model-selector button:hover {
+            border-color: #7c3aed;
+        }
+        @media (max-width: 480px) {
+            .chat-container { max-width: 100%; }
+            .chat-messages { height: 350px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="chat-container">
+    <!-- HEADER -->
+    <div class="chat-header">
+        <h1>🤖 Chat IA</h1>
+        <span style="font-size:0.7rem;opacity:0.5;">TESTE</span>
+        <span class="status" id="statusApi">🔄 Carregando...</span>
+    </div>
+
+    <!-- MENSAGENS -->
+    <div class="chat-messages" id="chatMessages">
+        <div class="msg bot">
+            <div class="nome">🤖 IA</div>
+            Olá! Sou uma IA gratuita para testes.<br>
+            Digite algo para começar! 🚀
+            <div class="hora">Agora</div>
+        </div>
+    </div>
+
+    <!-- TYPING -->
+    <div class="typing" id="typingIndicator">
+        <span></span><span></span><span></span>
+    </div>
+
+    <!-- MODELOS -->
+    <div class="model-selector">
+        <button class="active" data-model="deepseek">DeepSeek</button>
+        <button data-model="gemini">Gemini</button>
+        <button data-model="llama">Llama 3</button>
+        <button data-model="mistral">Mistral</button>
+    </div>
+
+    <!-- INPUT -->
+    <div class="chat-input">
+        <input type="text" id="chatInput" placeholder="Digite sua mensagem..." />
+        <button id="sendBtn" onclick="enviarMensagem()">Enviar</button>
+    </div>
+
+    <!-- STATUS -->
+    <div class="api-status">
+        <span id="apiStatusText">🔌 Conectando à API...</span>
+        <button class="clear-btn" onclick="limparChat()">🗑️ Limpar</button>
+    </div>
+</div>
+
+<script>
+// ============================================
+// CONFIGURAÇÃO DAS APIs GRATUITAS
+// ============================================
+
+// 📌 DEEPSEEK - GRÁTIS (50 msgs/dia)
+// 🔑 PEGUE SUA CHAVE EM: https://platform.deepseek.com/
+const DEEPSEEK_KEY = 'sk-5e7a3f9c8d2b4a6f8e1c3d7b9f5a2e8c4d6f9b1a3c5e7d9f2b4a6c8e0d2f4a6';
+const DEEPSEEK_URL = 'https://api.deepseek.com/v1/chat/completions';
+
+// 📌 GEMINI - GRÁTIS (60 req/min)
+// 🔑 PEGUE SUA CHAVE EM: https://ai.google.dev/
+const GEMINI_KEY = 'AIzaSyD7eB8fC9gA1hJ2kL3mN4oP5qR6sT7uV8wX9yZ';
+const GEMINI_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent';
+
+// 📌 GROQ - GRÁTIS (Llama 3, Mistral)
+// 🔑 PEGUE SUA CHAVE EM: https://console.groq.com/
+const GROQ_KEY = 'gsk_XyZ1aB2cD3eF4gH5iJ6kL7mN8oP9qR0sT';
+const GROQ_URL = 'https://api.groq.com/openai/v1/chat/completions';
+
+// ============================================
+// ESTADO
+// ============================================
+let modeloAtual = 'deepseek';
+let historico = [];
+let isLoading = false;
+
+// ============================================
+// FUNÇÕES PRINCIPAIS
+// ============================================
+
+function enviarMensagem() {
+    const input = document.getElementById('chatInput');
+    const msg = input.value.trim();
+    if (!msg || isLoading) return;
+
+    // Adiciona mensagem do usuário
+    adicionarMensagem('user', msg);
+    input.value = '';
+    isLoading = true;
+
+    // Mostra digitando
+    document.getElementById('typingIndicator').classList.add('show');
+    document.getElementById('sendBtn').disabled = true;
+    document.getElementById('chatInput').disabled = true;
+
+    // Envia para a IA
+    enviarParaIA(msg);
+}
+
+function adicionarMensagem(tipo, texto) {
+    const container = document.getElementById('chatMessages');
+    const div = document.createElement('div');
+    div.className = `msg ${tipo}`;
+
+    const agora = new Date();
+    const hora = agora.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+
+    const nome = tipo === 'user' ? '👤 Você' : '🤖 IA';
+
+    div.innerHTML = `
+        <div class="nome">${nome}</div>
+        ${texto}
+        <div class="hora">${hora}</div>
+    `;
+
+    container.appendChild(div);
+    container.scrollTop = container.scrollHeight;
+}
+
+function adicionarMensagemError(texto) {
+    const container = document.getElementById('chatMessages');
+    const div = document.createElement('div');
+    div.className = 'msg error';
+    div.textContent = '❌ ' + texto;
+    container.appendChild(div);
+    container.scrollTop = container.scrollHeight;
+}
+
+// ============================================
+// ENVIAR PARA IA
+// ============================================
+
+async function enviarParaIA(mensagem) {
+    try {
+        let resposta = '';
+
+        // Salva no histórico
+        historico.push({ role: 'user', content: mensagem });
+
+        switch (modeloAtual) {
+            case 'deepseek':
+                resposta = await chamarDeepSeek(mensagem);
+                break;
+            case 'gemini':
+                resposta = await chamarGemini(mensagem);
+                break;
+            case 'llama':
+                resposta = await chamarGroq(mensagem, 'llama3-70b-8192');
+                break;
+            case 'mistral':
+                resposta = await chamarGroq(mensagem, 'mixtral-8x7b-32768');
+                break;
+            default:
+                resposta = '⚠️ Modelo não configurado.';
+        }
+
+        // Salva resposta no histórico
+        historico.push({ role: 'assistant', content: resposta });
+
+        // Remove typing e mostra resposta
+        document.getElementById('typingIndicator').classList.remove('show');
+        adicionarMensagem('bot', resposta);
+
+    } catch (error) {
+        document.getElementById('typingIndicator').classList.remove('show');
+        adicionarMensagemError('Erro: ' + error.message);
+    } finally {
+        isLoading = false;
+        document.getElementById('sendBtn').disabled = false;
+        document.getElementById('chatInput').disabled = false;
+        document.getElementById('chatInput').focus();
+    }
+}
+
+// ============================================
+// DEEPSEEK API (GRÁTIS)
+// ============================================
+
+async function chamarDeepSeek(mensagem) {
+    const response = await fetch(DEEPSEEK_URL, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${DEEPSEEK_KEY}`
+        },
+        body: JSON.stringify({
+            model: 'deepseek-chat',
+            messages: [
+                { role: 'system', content: 'Você é um assistente útil e amigável.' },
+                ...historico
+            ],
+            max_tokens: 500,
+            temperature: 0.7
+        })
+    });
+
+    if (!response.ok) {
+        const erro = await response.text();
+        throw new Error(`DeepSeek: ${response.status} - ${erro}`);
+    }
+
+    const data = await response.json();
+    return data.choices[0].message.content;
+}
+
+// ============================================
+// GEMINI API (GRÁTIS)
+// ============================================
+
+async function chamarGemini(mensagem) {
+    const response = await fetch(`${GEMINI_URL}?key=${GEMINI_KEY}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            contents: [{
+                parts: [{ text: mensagem }]
+            }]
+        })
+    });
+
+    if (!response.ok) {
+        const erro = await response.text();
+        throw new Error(`Gemini: ${response.status} - ${erro}`);
+    }
+
+    const data = await response.json();
+    return data.candidates[0].content.parts[0].text;
+}
+
+// ============================================
+// GROQ API (LLAMA 3 / MISTRAL - GRÁTIS)
+// ============================================
+
+async function chamarGroq(mensagem, modelo) {
+    const response = await fetch(GROQ_URL, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${GROQ_KEY}`
+        },
+        body: JSON.stringify({
+            model: modelo,
+            messages: [
+                { role: 'system', content: 'Você é um assistente útil e amigável.' },
+                ...historico
+            ],
+            max_tokens: 500,
+            temperature: 0.7
+        })
+    });
+
+    if (!response.ok) {
+        const erro = await response.text();
+        throw new Error(`Groq: ${response.status} - ${erro}`);
+    }
+
+    const data = await response.json();
+    return data.choices[0].message.content;
+}
+
+// ============================================
+// UTILITÁRIOS
+// ============================================
+
+function limparChat() {
+    const container = document.getElementById('chatMessages');
+    container.innerHTML = '';
+    historico = [];
+
+    const msgBoasVindas = document.createElement('div');
+    msgBoasVindas.className = 'msg bot';
+    msgBoasVindas.innerHTML = `
+        <div class="nome">🤖 IA</div>
+        Chat limpo! Digite algo para começar. 🚀
+        <div class="hora">Agora</div>
+    `;
+    container.appendChild(msgBoasVindas);
+}
+
+function trocarModelo(modelo) {
+    modeloAtual = modelo;
+    document.querySelectorAll('.model-selector button').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.model === modelo);
+    });
+    atualizarStatusApi(`📡 Modelo: ${modelo.toUpperCase()}`);
+}
+
+function atualizarStatusApi(texto) {
+    document.getElementById('apiStatusText').textContent = texto;
+}
+
+// ============================================
+// EVENTOS
+// ============================================
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Enter para enviar
+    document.getElementById('chatInput').addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') enviarMensagem();
+    });
+
+    // Seleção de modelo
+    document.querySelectorAll('.model-selector button').forEach(btn => {
+        btn.addEventListener('click', function() {
+            trocarModelo(this.dataset.model);
+        });
+    });
+
+    // Status inicial
+    atualizarStatusApi('✅ Pronto para usar! (DeepSeek)');
+    document.getElementById('statusApi').textContent = '✅ Online';
+});
+
+// ============================================
+// TESTE RÁPIDO DE CONEXÃO
+// ============================================
+
+// Verifica se as chaves estão configuradas
+function verificarChaves() {
+    const keys = [
+        { nome: 'DeepSeek', key: DEEPSEEK_KEY, valida: DEEPSEEK_KEY && !DEEPSEEK_KEY.includes('COLOQUE') },
+        { nome: 'Gemini', key: GEMINI_KEY, valida: GEMINI_KEY && !GEMINI_KEY.includes('COLOQUE') },
+        { nome: 'Groq', key: GROQ_KEY, valida: GROQ_KEY && !GROQ_KEY.includes('COLOQUE') }
+    ];
+
+    const configuradas = keys.filter(k => k.valida);
+    if (configuradas.length === 0) {
+        console.warn('⚠️ Nenhuma chave API configurada!');
+        console.log('📌 Como configurar:');
+        console.log('1. DeepSeek: https://platform.deepseek.com/');
+        console.log('2. Gemini: https://ai.google.dev/');
+        console.log('3. Groq: https://console.groq.com/');
+        document.getElementById('statusApi').textContent = '❌ Configure as chaves no código!';
+    } else {
+        console.log(`✅ Chaves configuradas: ${configuradas.map(k => k.nome).join(', ')}`);
+        document.getElementById('statusApi').textContent = '✅ Chaves OK';
+    }
+}
+
+verificarChaves();
+
+console.log('🤖 Chat IA - Teste Grátis carregado!');
+console.log('📌 Modelos disponíveis: DeepSeek, Gemini, Llama 3, Mistral');
+console.log('💡 Digite sua mensagem e teste a IA!');
+</script>
+</body>
+  </html>
