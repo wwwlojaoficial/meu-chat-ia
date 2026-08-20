@@ -1,610 +1,284 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>🛒 KZN MENU - Simulação de Compra</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Segoe UI', system-ui, sans-serif;
-            background: #0a0a0a;
-            color: #f1f5f9;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-        .container {
-            width: 100%;
-            max-width: 900px;
-            background: #111;
-            border-radius: 16px;
-            border: 1px solid #1f1f1f;
-            padding: 30px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.8);
-        }
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-            border-bottom: 2px solid #1f1f1f;
-            padding-bottom: 20px;
-        }
-        .header h1 {
-            font-size: 2rem;
-            background: linear-gradient(135deg, #dc2626, #7c3aed);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        .header p {
-            color: #94a3b8;
-            margin-top: 5px;
-        }
-        .header .badge {
-            display: inline-block;
-            background: #22c55e;
-            color: #fff;
-            padding: 2px 12px;
-            border-radius: 12px;
-            font-size: 0.7rem;
-            font-weight: 700;
-            margin-top: 5px;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>KZN MENU â€” EdiÃ§Ã£o Halloween</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;600;700;800&family=Rajdhani:wght@500;600;700&display=swap');
 
-        /* ===== CHATBOT ÁREA ===== */
-        .chatbot-area {
-            background: #0a0a0a;
-            border-radius: 12px;
-            border: 1px solid #1f1f1f;
-            padding: 16px;
-            margin-bottom: 30px;
-            min-height: 300px;
-        }
-        .chatbot-area .label {
-            font-size: 0.7rem;
-            color: #64748b;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .chatbot-area .label i {
-            color: #7c3aed;
-        }
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;height:100%;overflow:hidden}
+body{
+  background:
+    radial-gradient(circle at 70% 20%,rgba(255,75,0,.12),transparent 28%),
+    radial-gradient(circle at 30% 80%,rgba(180,0,255,.12),transparent 30%),
+    #07070b;
+  color:#f5f5f7;
+  font-family:Rajdhani,Arial,sans-serif;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
 
-        /* ===== PLANOS ===== */
-        .plans-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 16px;
-            margin: 20px 0;
-        }
-        .plan-card {
-            background: #1a1a1a;
-            border: 1px solid #2a2a2a;
-            border-radius: 12px;
-            padding: 20px;
-            text-align: center;
-            transition: 0.3s;
-            cursor: pointer;
-        }
-        .plan-card:hover {
-            border-color: #7c3aed;
-            transform: translateY(-4px);
-            box-shadow: 0 8px 30px rgba(124,58,237,0.15);
-        }
-        .plan-card.selected {
-            border-color: #dc2626;
-            box-shadow: 0 0 30px rgba(220,38,38,0.2);
-        }
-        .plan-card .icon {
-            font-size: 2rem;
-            margin-bottom: 8px;
-        }
-        .plan-card h3 {
-            font-size: 1rem;
-            color: #f1f5f9;
-        }
-        .plan-card .price {
-            font-size: 1.5rem;
-            font-weight: 900;
-            color: #dc2626;
-            margin: 8px 0;
-        }
-        .plan-card .price small {
-            font-size: 0.7rem;
-            color: #94a3b8;
-            font-weight: 400;
-        }
-        .plan-card .features {
-            list-style: none;
-            font-size: 0.8rem;
-            color: #94a3b8;
-        }
-        .plan-card .features li {
-            padding: 4px 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-        }
-        .plan-card .features li i {
-            color: #22c55e;
-        }
+.menu{
+  width:min(1080px,94vw);
+  height:min(690px,88vh);
+  min-height:520px;
+  display:grid;
+  grid-template-rows:82px 1fr 34px;
+  background:rgba(11,11,17,.96);
+  border:1px solid rgba(255,82,0,.48);
+  border-radius:20px;
+  overflow:hidden;
+  box-shadow:
+    0 0 0 1px rgba(160,0,255,.16),
+    0 0 35px rgba(255,70,0,.16),
+    0 30px 90px rgba(0,0,0,.75);
+}
 
-        /* ===== CARRINHO ===== */
-        .cart-area {
-            background: #0a0a0a;
-            border-radius: 12px;
-            border: 1px solid #1f1f1f;
-            padding: 20px;
-            margin-top: 20px;
-        }
-        .cart-area h3 {
-            color: #f1f5f9;
-            margin-bottom: 10px;
-        }
-        .cart-area h3 i {
-            color: #f59e0b;
-        }
-        .cart-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 8px 0;
-            border-bottom: 1px solid #1a1a1a;
-        }
-        .cart-item .item-name {
-            color: #f1f5f9;
-        }
-        .cart-item .item-price {
-            color: #dc2626;
-            font-weight: 700;
-        }
-        .cart-total {
-            display: flex;
-            justify-content: space-between;
-            padding: 12px 0;
-            font-weight: 700;
-            border-top: 2px solid #1f1f1f;
-            margin-top: 10px;
-        }
-        .cart-total .total-value {
-            color: #dc2626;
-            font-size: 1.2rem;
-        }
-        .empty-cart {
-            color: #94a3b8;
-            text-align: center;
-            padding: 10px 0;
-        }
+.header{
+  display:flex;
+  align-items:center;
+  gap:16px;
+  padding:0 22px;
+  background:linear-gradient(90deg,#0b0b11,#11101a 55%,#0b0b11);
+  border-bottom:1px solid rgba(255,82,0,.42);
+}
 
-        /* ===== BOTÕES ===== */
-        .btn {
-            padding: 10px 24px;
-            border: none;
-            border-radius: 10px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: 0.3s;
-            font-size: 0.9rem;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .btn-primary {
-            background: linear-gradient(135deg, #dc2626, #7c3aed);
-            color: #fff;
-            width: 100%;
-            justify-content: center;
-        }
-        .btn-primary:hover {
-            transform: scale(1.02);
-            box-shadow: 0 4px 30px rgba(124,58,237,0.3);
-        }
-        .btn-secondary {
-            background: #1a1a1a;
-            color: #f1f5f9;
-            border: 1px solid #2a2a2a;
-            width: 100%;
-            justify-content: center;
-        }
-        .btn-secondary:hover {
-            border-color: #7c3aed;
-        }
-        .btn-success {
-            background: #22c55e;
-            color: #fff;
-            width: 100%;
-            justify-content: center;
-        }
-        .btn-success:hover {
-            background: #16a34a;
-            transform: scale(1.02);
-        }
-        .btn-danger {
-            background: transparent;
-            color: #ef4444;
-            border: 1px solid #ef4444;
-            padding: 4px 12px;
-            font-size: 0.7rem;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-        .btn-danger:hover {
-            background: rgba(239,68,68,0.15);
-        }
-        .btn-group {
-            display: flex;
-            gap: 10px;
-            margin-top: 10px;
-        }
+.logo{
+  width:48px;height:48px;border-radius:14px;
+  display:grid;place-items:center;
+  font-family:Orbitron,sans-serif;font-weight:800;font-size:13px;
+  color:#fff;
+  background:
+    radial-gradient(circle at 50% 35%,#ff5a00 0 18%,transparent 19%),
+    linear-gradient(145deg,#240016,#09090e);
+  border:1px solid #ff4b00;
+  box-shadow:0 0 18px rgba(255,65,0,.65), inset 0 0 15px rgba(255,65,0,.22);
+}
 
-        /* ===== MODAL ===== */
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.85);
-            backdrop-filter: blur(8px);
-            z-index: 9999;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-        .modal-overlay.open {
-            display: flex;
-        }
-        .modal-content {
-            background: #111;
-            border: 1px solid #1f1f1f;
-            border-radius: 16px;
-            padding: 30px;
-            max-width: 420px;
-            width: 100%;
-            text-align: center;
-            animation: modalIn 0.3s ease;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.9);
-        }
-        @keyframes modalIn {
-            from { opacity: 0; transform: scale(0.9) translateY(20px); }
-            to { opacity: 1; transform: scale(1) translateY(0); }
-        }
-        .modal-content .success-icon {
-            font-size: 4rem;
-            color: #22c55e;
-            margin-bottom: 10px;
-        }
-        .modal-content h2 {
-            color: #f1f5f9;
-            margin-bottom: 5px;
-        }
-        .modal-content p {
-            color: #94a3b8;
-            font-size: 0.9rem;
-            margin-bottom: 15px;
-        }
-        .modal-content .pix-key {
-            background: #0a0a0a;
-            padding: 12px;
-            border-radius: 8px;
-            border: 1px solid #22c55e;
-            font-family: monospace;
-            color: #22c55e;
-            font-size: 0.9rem;
-            word-break: break-all;
-            margin: 10px 0;
-        }
-        .modal-content .btn-copy {
-            background: #7c3aed;
-            color: #fff;
-            border: none;
-            padding: 8px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: 0.3s;
-            font-size: 0.85rem;
-        }
-        .modal-content .btn-copy:hover {
-            transform: scale(1.05);
-        }
-        .modal-content .close-modal {
-            margin-top: 15px;
-            background: transparent;
-            border: 1px solid #2a2a2a;
-            color: #94a3b8;
-            padding: 8px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: 0.3s;
-            font-size: 0.8rem;
-        }
-        .modal-content .close-modal:hover {
-            border-color: #ef4444;
-            color: #ef4444;
-        }
+.brand{display:flex;align-items:center;gap:10px}
+.brand h1{
+  font-family:Orbitron,sans-serif;
+  font-size:21px;
+  letter-spacing:1px;
+}
+.brand h1 span{color:#ff4b24}
+.version{
+  font-family:Orbitron,sans-serif;
+  font-size:10px;
+  color:#aaa;
+  padding:6px 9px;
+  border:1px solid #33333d;
+  border-radius:999px;
+}
+.event{
+  font-family:Orbitron,sans-serif;
+  font-size:10px;
+  color:#ffb48f;
+  padding:7px 11px;
+  border:1px solid rgba(255,88,20,.5);
+  background:rgba(255,67,0,.08);
+  border-radius:999px;
+  box-shadow:0 0 14px rgba(255,70,0,.12);
+}
+.spacer{flex:1}
+.header-btn{
+  border:0;border-radius:10px;padding:11px 17px;
+  color:#fff;font-family:Orbitron,sans-serif;font-size:10px;font-weight:700;
+  cursor:pointer;
+}
+.discord{background:#5865f2;box-shadow:0 0 16px rgba(88,101,242,.25)}
+.youtube{background:#ff2525;box-shadow:0 0 16px rgba(255,37,37,.22)}
+.close{
+  width:40px;height:40px;padding:0;border-radius:50%;
+  background:#171720;border:1px solid #373743;
+  font-size:20px;color:#ddd;
+}
 
-        /* ===== RESPONSIVO ===== */
-        @media (max-width: 600px) {
-            .container { padding: 16px; }
-            .plans-grid { grid-template-columns: 1fr; }
-            .header h1 { font-size: 1.5rem; }
-        }
-    </style>
+.body{display:grid;grid-template-columns:230px 1fr;min-height:0}
+.sidebar{
+  padding:20px 12px;
+  background:linear-gradient(180deg,#0d0b12,#09090d);
+  border-right:1px solid #24232c;
+  overflow:auto;
+}
+.sidebar-title{
+  font-family:Orbitron,sans-serif;
+  font-size:10px;color:#777;
+  padding:0 12px 12px;
+  letter-spacing:1.5px;
+}
+.nav{
+  display:flex;align-items:center;gap:12px;
+  width:100%;padding:13px 14px;margin:4px 0;
+  color:#a9a9b3;background:transparent;border:1px solid transparent;
+  border-radius:12px;text-align:left;
+  font-family:Rajdhani,sans-serif;font-weight:700;font-size:15px;
+}
+.nav.active{
+  color:#fff;
+  background:linear-gradient(90deg,rgba(255,55,0,.19),rgba(160,0,255,.08));
+  border-color:rgba(255,67,0,.36);
+  box-shadow:0 0 18px rgba(255,50,0,.08);
+}
+.nav b{font-size:18px;width:22px;text-align:center}
+.content{
+  padding:28px;
+  overflow:auto;
+  background:
+    radial-gradient(circle at 85% 0%,rgba(255,68,0,.07),transparent 28%),
+    #101017;
+}
+.page-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:22px}
+.page-head h2{
+  font-family:Orbitron,sans-serif;font-size:25px;letter-spacing:1px
+}
+.page-head p{margin-top:7px;color:#81818d;font-size:14px}
+.status{
+  display:flex;align-items:center;gap:8px;color:#72ffae;font-size:12px;
+  font-family:Orbitron,sans-serif
+}
+.dot{width:8px;height:8px;border-radius:50%;background:#4cff92;box-shadow:0 0 12px #4cff92}
+
+.cards{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:15px;
+}
+.card{
+  min-height:142px;
+  padding:19px;
+  border-radius:16px;
+  background:linear-gradient(145deg,#15151e,#101017);
+  border:1px solid #292934;
+  position:relative;
+  overflow:hidden;
+  box-shadow:inset 0 1px rgba(255,255,255,.025);
+}
+.card:before{
+  content:"";position:absolute;left:0;top:0;width:3px;height:100%;
+  background:linear-gradient(#ff3b12,#a600ff);
+  box-shadow:0 0 16px rgba(255,60,0,.45);
+}
+.card h3{font-family:Orbitron,sans-serif;font-size:15px;margin-bottom:8px}
+.card p{color:#858592;font-size:13px;line-height:1.35;max-width:72%}
+.toggle{
+  position:absolute;right:18px;top:18px;
+  width:48px;height:26px;border-radius:999px;background:#30303a;
+  border:1px solid #41414c;
+}
+.toggle i{
+  display:block;width:20px;height:20px;margin:2px;border-radius:50%;
+  background:#e8e8eb;box-shadow:0 2px 5px rgba(0,0,0,.35);
+}
+.toggle.on{
+  background:linear-gradient(90deg,#ff3510,#ff7a00);
+  box-shadow:0 0 18px rgba(255,68,0,.35);
+}
+.toggle.on i{margin-left:24px}
+
+.footer{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 18px;color:#555562;background:#0b0b10;
+  border-top:1px solid #20202a;font-size:11px;
+  font-family:Orbitron,sans-serif;
+}
+
+@media(max-width:760px){
+  .menu{width:96vw;height:92vh}
+  .body{grid-template-columns:78px 1fr}
+  .sidebar-title,.nav span{display:none}
+  .nav{justify-content:center;padding:14px 8px}
+  .header-btn{padding:9px}
+  .header-btn{font-size:0}.header-btn:after{font-size:14px}
+  .discord:after{content:"D"}.youtube:after{content:"Y"}
+  .brand h1{font-size:16px}.event{display:none}
+  .cards{grid-template-columns:1fr}
+}
+</style>
 </head>
 <body>
 
-<div class="container">
-    <!-- HEADER -->
-    <div class="header">
-        <h1><i class="fas fa-crown" style="color:#f59e0b;"></i> KZN MENU</h1>
-        <p>Simulação de Compra - Mod Menu Graal</p>
-        <span class="badge"><i class="fas fa-check"></i> Simulação</span>
+<div class="menu">
+
+  <header class="header">
+    <div class="logo">KZN</div>
+
+    <div class="brand">
+      <h1>KZN <span>MENU</span></h1>
+      <div class="version">V1.0</div>
+      <div class="event">ðŸŽƒ EDIÃ‡ÃƒO HALLOWEEN</div>
     </div>
 
-    <!-- CHATBOT ÁREA -->
-    <div class="chatbot-area">
-        <div class="label">
-            <i class="fas fa-robot"></i> Assistente Virtual
-            <span style="margin-left:auto;font-size:0.6rem;color:#22c55e;"><i class="fas fa-circle"></i> Online</span>
-        </div>
-        <!-- ELFSIGHT CHATBOT -->
-        <script src="https://elfsightcdn.com/platform.js" async></script>
-        <div class="elfsight-app-abcf1e20-f4ba-48ce-9c78-943fe0639a97" data-elfsight-app-lazy></div>
-    </div>
+    <div class="spacer"></div>
 
-    <!-- PLANOS -->
-    <h3 style="margin-top:10px;color:#f1f5f9;"><i class="fas fa-cubes" style="color:#dc2626;"></i> Escolha seu Plano</h3>
-    <div class="plans-grid" id="plansGrid">
-        <!-- SIMPLE -->
-        <div class="plan-card" data-plan="SIMPLE" data-price="30" onclick="selecionarPlano(this)">
-            <div class="icon">🟡</div>
-            <h3>SIMPLE</h3>
-            <div class="price">R$ 30,00 <small>20 dias</small></div>
-            <ul class="features">
-                <li><i class="fas fa-check"></i> Acesso ao Mod Menu</li>
-                <li><i class="fas fa-check"></i> Key de ativação</li>
-            </ul>
-        </div>
+    <button class="header-btn discord">DISCORD</button>
+    <button class="header-btn youtube">YOUTUBE</button>
+    <button class="header-btn close">Ã—</button>
+  </header>
 
-        <!-- BASIC -->
-        <div class="plan-card" data-plan="BASIC" data-price="50" onclick="selecionarPlano(this)">
-            <div class="icon">🟢</div>
-            <h3>BASIC</h3>
-            <div class="price">R$ 50,00 <small>35 dias</small></div>
-            <ul class="features">
-                <li><i class="fas fa-check"></i> Acesso ao Mod Menu</li>
-                <li><i class="fas fa-check"></i> Key de ativação</li>
-                <li><i class="fas fa-check"></i> Suporte ao cliente</li>
-            </ul>
-        </div>
+  <main class="body">
 
-        <!-- PRO -->
-        <div class="plan-card" data-plan="PRO" data-price="150" onclick="selecionarPlano(this)">
-            <div class="icon">🟣</div>
-            <h3>PRO</h3>
-            <div class="price">R$ 150,00 <small>105 dias</small></div>
-            <ul class="features">
-                <li><i class="fas fa-check"></i> Acesso ao Mod Menu</li>
-                <li><i class="fas fa-check"></i> Key de ativação</li>
-                <li><i class="fas fa-check"></i> Suporte prioritário</li>
-            </ul>
-        </div>
+    <aside class="sidebar">
+      <div class="sidebar-title">MENU</div>
 
-        <!-- PREMIUM -->
-        <div class="plan-card" data-plan="PREMIUM" data-price="200" onclick="selecionarPlano(this)">
-            <div class="icon">🔥</div>
-            <h3>PREMIUM</h3>
-            <div class="price">R$ 200,00 <small>140 dias</small></div>
-            <ul class="features">
-                <li><i class="fas fa-check"></i> Acesso ao Mod Menu</li>
-                <li><i class="fas fa-check"></i> Key de ativação</li>
-                <li><i class="fas fa-check"></i> Recursos premium</li>
-            </ul>
-        </div>
-    </div>
+      <div class="nav active"><b>â—‰</b><span>VISUAL</span></div>
+      <div class="nav"><b>âš¡</b><span>MODS</span></div>
+      <div class="nav"><b>ðŸŽ©</b><span>AVATAR</span></div>
+      <div class="nav"><b>ðŸ’¥</b><span>COMBATE</span></div>
+      <div class="nav"><b>ðŸ“</b><span>TELEPORTES</span></div>
+      <div class="nav"><b>ðŸ“¢</b><span>SOCIAL</span></div>
+      <div class="nav"><b>ðŸ§°</b><span>UTILIDADES</span></div>
+      <div class="nav"><b>ðŸŽƒ</b><span>EVENTO</span></div>
+    </aside>
 
-    <!-- CARRINHO -->
-    <div class="cart-area">
-        <h3><i class="fas fa-shopping-cart"></i> Seu Carrinho</h3>
-        <div id="cartItems">
-            <div class="empty-cart">🛒 Nenhum item adicionado</div>
+    <section class="content">
+      <div class="page-head">
+        <div>
+          <h2>VISUAL</h2>
+          <p>Recursos visuais do KZN MENU</p>
         </div>
-        <div class="cart-total">
-            <span>Total:</span>
-            <span class="total-value" id="cartTotal">R$ 0,00</span>
-        </div>
-        <button class="btn btn-primary" onclick="finalizarCompra()">
-            <i class="fas fa-credit-card"></i> Finalizar Compra
-        </button>
-        <div class="btn-group">
-            <button class="btn btn-secondary" onclick="limparCarrinho()">
-                <i class="fas fa-trash"></i> Limpar
-            </button>
-        </div>
-    </div>
+        <div class="status"><i class="dot"></i> ONLINE</div>
+      </div>
 
-    <!-- FOOTER -->
-    <div style="text-align:center;margin-top:20px;font-size:0.7rem;color:#64748b;border-top:1px solid #1a1a1a;padding-top:15px;">
-        <i class="fas fa-shield-alt" style="color:#22c55e;"></i> Simulação de Compra - KZN MENU
-        <br>Chave PIX: <span style="font-family:monospace;color:#22c55e;">6c80021c-957b-49c0-9a5d-98371bf67120</span>
-    </div>
+      <div class="cards">
+
+        <article class="card">
+          <div class="toggle"><i></i></div>
+          <h3>ESP PLAYER</h3>
+          <p>Mostra players com linha RGB.</p>
+        </article>
+
+        <article class="card">
+          <div class="toggle"><i></i></div>
+          <h3>ESP ADMIN</h3>
+          <p>Detecta administradores invisÃ­veis.</p>
+        </article>
+
+        <article class="card">
+          <div class="toggle"><i></i></div>
+          <h3>ESP LOOT</h3>
+          <p>Destaca loot e baÃºs.</p>
+        </article>
+
+        <article class="card">
+          <div class="toggle on"><i></i></div>
+          <h3>ESP INSETOS</h3>
+          <p>Detector visual de insetos.</p>
+        </article>
+
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <span>KZN MENU â€¢ EDIÃ‡ÃƒO HALLOWEEN</span>
+    <span>VISUAL PREVIEW â€¢ SEM FUNÃ‡Ã•ES</span>
+  </footer>
+
 </div>
-
-<!-- ===== MODAL DE PAGAMENTO ===== -->
-<div class="modal-overlay" id="modalPix">
-    <div class="modal-content">
-        <div class="success-icon">✅</div>
-        <h2>Pagamento Gerado!</h2>
-        <p>Copie a chave PIX abaixo e realize o pagamento:</p>
-        <div class="pix-key" id="pixKeyDisplay">6c80021c-957b-49c0-9a5d-98371bf67120</div>
-        <button class="btn-copy" onclick="copiarPix()"><i class="fas fa-copy"></i> Copiar Chave PIX</button>
-        <div style="margin:10px 0;font-size:0.8rem;color:#94a3b8;">
-            <strong>Produto:</strong> <span id="modalProduto">-</span><br>
-            <strong>Valor:</strong> <span id="modalValor">-</span>
-        </div>
-        <button class="close-modal" onclick="fecharModalPix()"><i class="fas fa-times"></i> Fechar</button>
-    </div>
-</div>
-
-<script>
-// ============================================
-// SIMULAÇÃO DE COMPRA - KZN MENU
-// ============================================
-
-let carrinho = [];
-let planoSelecionado = null;
-
-// ============================================
-// SELECIONAR PLANO
-// ============================================
-
-function selecionarPlano(element) {
-    // Remove seleção anterior
-    document.querySelectorAll('.plan-card').forEach(card => {
-        card.classList.remove('selected');
-    });
-    
-    // Adiciona seleção ao clicado
-    element.classList.add('selected');
-    
-    const nome = element.dataset.plan;
-    const preco = parseInt(element.dataset.price);
-    
-    planoSelecionado = { nome, preco };
-    
-    // Adiciona ao carrinho automaticamente
-    adicionarAoCarrinho(nome, preco);
-}
-
-// ============================================
-// CARRINHO
-// ============================================
-
-function adicionarAoCarrinho(nome, preco) {
-    // Verifica se já existe
-    const existente = carrinho.find(item => item.nome === nome);
-    if (existente) {
-        existente.quantidade++;
-    } else {
-        carrinho.push({ nome, preco, quantidade: 1 });
-    }
-    atualizarCarrinho();
-}
-
-function removerDoCarrinho(index) {
-    carrinho.splice(index, 1);
-    atualizarCarrinho();
-}
-
-function limparCarrinho() {
-    if (carrinho.length === 0) return;
-    if (!confirm('Tem certeza que deseja limpar o carrinho?')) return;
-    carrinho = [];
-    planoSelecionado = null;
-    document.querySelectorAll('.plan-card').forEach(card => {
-        card.classList.remove('selected');
-    });
-    atualizarCarrinho();
-}
-
-function atualizarCarrinho() {
-    const container = document.getElementById('cartItems');
-    const totalContainer = document.getElementById('cartTotal');
-    
-    if (carrinho.length === 0) {
-        container.innerHTML = `<div class="empty-cart">🛒 Nenhum item adicionado</div>`;
-        totalContainer.textContent = 'R$ 0,00';
-        return;
-    }
-    
-    let html = '';
-    let total = 0;
-    
-    carrinho.forEach((item, index) => {
-        const subtotal = item.preco * item.quantidade;
-        total += subtotal;
-        html += `
-            <div class="cart-item">
-                <span class="item-name">${item.nome} x${item.quantidade}</span>
-                <span class="item-price">R$ ${subtotal.toFixed(2)}</span>
-                <button class="btn-danger" onclick="removerDoCarrinho(${index})">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-        `;
-    });
-    
-    container.innerHTML = html;
-    totalContainer.textContent = `R$ ${total.toFixed(2)}`;
-}
-
-// ============================================
-// FINALIZAR COMPRA
-// ============================================
-
-function finalizarCompra() {
-    if (carrinho.length === 0) {
-        alert('🛒 Seu carrinho está vazio! Selecione um plano primeiro.');
-        return;
-    }
-    
-    const total = carrinho.reduce((sum, item) => sum + (item.preco * item.quantidade), 0);
-    const produtos = carrinho.map(item => item.nome).join(', ');
-    
-    // Abre modal com os dados
-    document.getElementById('modalProduto').textContent = produtos;
-    document.getElementById('modalValor').textContent = `R$ ${total.toFixed(2)}`;
-    document.getElementById('modalPix').classList.add('open');
-}
-
-function fecharModalPix() {
-    document.getElementById('modalPix').classList.remove('open');
-}
-
-function copiarPix() {
-    const key = document.getElementById('pixKeyDisplay').textContent;
-    navigator.clipboard.writeText(key).then(() => {
-        const btn = document.querySelector('.btn-copy');
-        const original = btn.innerHTML;
-        btn.innerHTML = '<i class="fas fa-check"></i> Copiado!';
-        setTimeout(() => { btn.innerHTML = original; }, 2000);
-    }).catch(() => {
-        alert('📋 Chave PIX: ' + key);
-    });
-}
-
-// ============================================
-// CLIQUE FORA DO MODAL PARA FECHAR
-// ============================================
-
-document.getElementById('modalPix').addEventListener('click', function(e) {
-    if (e.target === this) {
-        fecharModalPix();
-    }
-});
-
-// ============================================
-// ATALHO TECLADO
-// ============================================
-
-document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') {
-        fecharModalPix();
-    }
-});
-
-console.log('🛒 KZN MENU - Simulação de Compra carregada!');
-console.log('📌 Selecione um plano para adicionar ao carrinho.');
-</script>
 </body>
 </html>
