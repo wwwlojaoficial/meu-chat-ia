@@ -2,148 +2,545 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>KZN MENU — EDIÇÃO HALLOWEEN</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;600;700;800&family=Rajdhani:wght@500;600;700&display=swap');
-:root{--red:#ff3b20;--orange:#ff7a00;--purple:#9b38ff;--bg:#09090f;--panel:#11111a;--text:#f7f7fb;--muted:#888896}
-*{box-sizing:border-box;margin:0;padding:0}
-html,body{width:100%;height:100%;overflow:hidden}
-body{font-family:Rajdhani,Arial,sans-serif;background:
-radial-gradient(circle at 78% 18%,rgba(255,75,0,.14),transparent 28%),
-radial-gradient(circle at 20% 82%,rgba(142,0,255,.14),transparent 32%),#06060a;color:var(--text)}
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;600;700&family=Rajdhani:wght@500;600;700&display=swap');
+
+:root{
+  --bg:#07070b;
+  --panel:#101016;
+  --panel2:#15151d;
+  --line:#292731;
+  --text:#f5f3f7;
+  --muted:#898692;
+  --orange:#ff5a1f;
+  --purple:#a238ff;
+  --red:#ff3030;
+  --green:#27e48a;
+}
+
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;overflow:hidden}
+body{
+  font-family:Rajdhani,Arial,sans-serif;
+  color:var(--text);
+  background:
+    radial-gradient(circle at 75% 10%,#ff4d171c,transparent 30%),
+    radial-gradient(circle at 15% 90%,#8e28ff18,transparent 34%),
+    #050508;
+}
+
 button{font:inherit}
-#app{position:fixed;inset:0;display:grid;place-items:center;padding:18px}
-.menu{width:min(1080px,96vw);height:min(690px,92vh);display:grid;grid-template-rows:78px 1fr 32px;
-background:rgba(12,12,18,.97);border:1px solid rgba(255,70,20,.52);border-radius:20px;overflow:hidden;
-box-shadow:0 0 0 1px rgba(151,44,255,.18),0 0 40px rgba(255,62,0,.18),0 28px 90px #000b}
-.header{display:flex;align-items:center;gap:14px;padding:0 18px;border-bottom:1px solid #30232b;
-background:linear-gradient(90deg,#0b0b10,#16121a,#0b0b10)}
-.logo{width:48px;height:48px;border-radius:14px;display:grid;place-items:center;font:800 12px Orbitron;
-background:radial-gradient(circle at 50% 35%,#ff4a12 0 16%,transparent 17%),linear-gradient(145deg,#270013,#09090d);
-border:1px solid #ff491e;box-shadow:0 0 18px #ff3b2055;color:white}
-.brand{display:flex;align-items:center;gap:9px;white-space:nowrap}.brand h1{font:700 21px Orbitron;letter-spacing:.5px}
-.brand h1 span{color:#ff4b2b}.version,.halloween{font:600 10px Orbitron;padding:6px 9px;border-radius:999px}
-.version{border:1px solid #3b3943;color:#aaa}.halloween{color:#ffb08c;border:1px solid #ff5a2866;background:#ff4b1a12}
-.spacer{flex:1}.hbtn{border:0;color:white;border-radius:10px;padding:10px 16px;font:700 10px Orbitron;cursor:pointer}
-.discord{background:#5865f2}.youtube{background:#f52828}.close{width:40px;height:40px;padding:0;border-radius:50%;background:#1a1a22;border:1px solid #444;color:#eee;font-size:22px}
-.body{display:grid;grid-template-columns:218px 1fr;min-height:0}.sidebar{background:linear-gradient(180deg,#0d0b12,#09090d);border-right:1px solid #29262e;padding:18px 11px;overflow:auto}
-.side-title{font:600 10px Orbitron;color:#6d6b76;padding:0 12px 10px;letter-spacing:1.4px}
-.nav{width:100%;display:flex;align-items:center;gap:12px;padding:12px 13px;margin:3px 0;border-radius:12px;border:1px solid transparent;
-background:none;color:#aaa7b1;cursor:pointer;text-align:left;font-weight:700;font-size:15px;transition:.15s}
-.nav:hover{color:white;background:#ffffff08}.nav.active{color:white;border-color:#ff482b66;background:linear-gradient(90deg,#ff3b2026,#8d32ff0c);box-shadow:0 0 18px #ff3b2010}
-.icon{width:22px;text-align:center;font-size:16px;color:#ff714d}.nav.active .icon{filter:drop-shadow(0 0 5px #ff4b2b)}
-.content{min-width:0;overflow:auto;padding:26px;background:radial-gradient(circle at 85% 0,#ff4b1a0d,transparent 30%),#101017}
-.page{display:none;animation:in .18s ease}.page.active{display:block}@keyframes in{from{opacity:.2;transform:translateY(4px)}to{opacity:1;transform:none}}
-.page-head{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:20px}.page-head h2{font:700 25px Orbitron}.page-head p{color:#85838e;margin-top:6px;font-size:14px}.online{font:600 11px Orbitron;color:#68ff9e}.online i{display:inline-block;width:7px;height:7px;border-radius:50%;background:#4cff92;box-shadow:0 0 10px #4cff92;margin-right:6px}
-.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.card{position:relative;min-height:138px;padding:18px;border:1px solid #2a2933;border-radius:16px;background:linear-gradient(145deg,#171720,#101017);overflow:hidden}
-.card:before{content:"";position:absolute;left:0;top:0;width:3px;height:100%;background:linear-gradient(#ff3b20,#9b38ff);box-shadow:0 0 15px #ff3b2055}
-.card h3{font:600 14px Orbitron;margin-bottom:8px}.card p{color:#888792;font-size:13px;max-width:70%;line-height:1.3}
-.toggle{position:absolute;right:17px;top:17px;width:48px;height:26px;border-radius:20px;background:#34343e;border:1px solid #454550;cursor:pointer}.toggle i{display:block;width:20px;height:20px;margin:2px;border-radius:50%;background:#eee;transition:.18s}.toggle.on{background:linear-gradient(90deg,#ff3515,#ff8a00);box-shadow:0 0 16px #ff5a2645}.toggle.on i{margin-left:24px}
-.empty{min-height:350px;border:1px dashed #383640;border-radius:18px;display:grid;place-items:center;color:#777481;background:#ffffff03}.empty strong{font:600 14px Orbitron;color:#aaa}
-.settings{display:grid;grid-template-columns:1fr 1fr;gap:14px}.setting{border:1px solid #2b2a34;border-radius:16px;padding:18px;background:#15151e}.setting h3{font:600 14px Orbitron;margin-bottom:16px}.range{width:100%}.colors{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.color{height:34px;border-radius:9px;border:1px solid #555;cursor:pointer}.c1{background:#11111a}.c2{background:#1d1740}.c3{background:#000}.c4{background:#fff}.c5{background:#ff4cac}.c6{background:#8d32ff}.c7{background:#2389ff}.c8{background:#00bd86}.c9{background:#ff9d00}.c10{background:#ff303c}.c11{background:#9456ff}.c12{background:#13b5cf}
-.footer{display:flex;align-items:center;justify-content:space-between;padding:0 16px;border-top:1px solid #24232b;color:#5f5d68;font:600 9px Orbitron}
-@media(max-width:760px){.menu{height:94vh;width:97vw}.body{grid-template-columns:72px 1fr}.side-title,.nav span{display:none}.nav{justify-content:center;padding:13px 5px}.header{padding:0 10px}.brand h1{font-size:15px}.halloween{display:none}.hbtn{font-size:0;padding:10px}.discord:after{content:"D";font-size:13px}.youtube:after{content:"Y";font-size:13px}.content{padding:18px}.cards,.settings{grid-template-columns:1fr}}
+
+#stage{
+  width:100%;
+  height:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:18px;
+}
+
+.menu{
+  width:min(1050px,96vw);
+  height:min(670px,92vh);
+  display:grid;
+  grid-template-rows:76px 1fr 30px;
+  background:#0d0d13;
+  border:1px solid #ff5a1f88;
+  border-radius:18px;
+  overflow:hidden;
+  box-shadow:
+    0 0 0 1px #9b35ff22,
+    0 0 35px #ff4b1820,
+    0 25px 80px #000;
+}
+
+.header{
+  display:flex;
+  align-items:center;
+  gap:13px;
+  padding:0 17px;
+  background:linear-gradient(90deg,#0a0a0e,#151119,#0a0a0e);
+  border-bottom:1px solid #312831;
+}
+
+.logo{
+  width:48px;height:48px;
+  border-radius:13px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font:700 12px Orbitron;
+  color:#fff;
+  background:linear-gradient(145deg,#310014,#09090d);
+  border:1px solid #ff5728;
+  box-shadow:0 0 17px #ff4b2445;
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  white-space:nowrap;
+}
+.brand strong{
+  font:700 19px Orbitron;
+  letter-spacing:.5px;
+}
+.brand strong span{color:#ff4a28}
+.version,.edition{
+  border-radius:999px;
+  padding:5px 8px;
+  font:600 9px Orbitron;
+}
+.version{color:#aaa;border:1px solid #3a3841}
+.edition{
+  color:#ffb69b;
+  border:1px solid #ff5a1f66;
+  background:#ff5a1f12;
+}
+
+.spacer{flex:1}
+
+.headbtn{
+  border:0;
+  border-radius:9px;
+  color:white;
+  padding:9px 15px;
+  font:700 10px Orbitron;
+  cursor:pointer;
+}
+.discord{background:#5865f2}
+.youtube{background:#ef2929}
+.close{
+  width:39px;height:39px;padding:0;
+  border-radius:50%;
+  background:#202028;
+  border:1px solid #4b4852;
+  font-size:21px;
+}
+
+.body{
+  display:grid;
+  grid-template-columns:205px 1fr;
+  min-height:0;
+}
+
+.sidebar{
+  min-height:0;
+  overflow:auto;
+  padding:16px 10px;
+  background:linear-gradient(180deg,#0d0b11,#08080c);
+  border-right:1px solid #29262e;
+}
+
+.side-title{
+  padding:2px 12px 10px;
+  color:#686570;
+  font:600 9px Orbitron;
+  letter-spacing:1.4px;
+}
+
+.nav{
+  width:100%;
+  display:flex;
+  align-items:center;
+  gap:11px;
+  padding:11px 12px;
+  margin:3px 0;
+  border:1px solid transparent;
+  border-radius:11px;
+  background:transparent;
+  color:#a5a2ad;
+  cursor:pointer;
+  text-align:left;
+  font-size:14px;
+  font-weight:700;
+}
+
+.nav:hover{background:#ffffff08;color:#fff}
+
+.nav.active{
+  color:#fff;
+  border-color:#ff4c2b66;
+  background:linear-gradient(90deg,#ff451c22,#9b32ff0b);
+  box-shadow:inset 3px 0 0 #ff4b28,0 0 18px #ff3b2010;
+}
+
+.nav b{
+  width:22px;
+  text-align:center;
+  color:#ff6b3d;
+  font-size:15px;
+}
+
+.content{
+  min-width:0;
+  min-height:0;
+  overflow:auto;
+  padding:25px;
+  background:
+    radial-gradient(circle at 85% 0,#ff50100b,transparent 32%),
+    #101016;
+}
+
+.page{display:none}
+.page.active{display:block}
+
+.page-title{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+  margin-bottom:20px;
+}
+.page-title h2{
+  margin:0;
+  font:700 24px Orbitron;
+}
+.page-title p{
+  margin:6px 0 0;
+  color:#85828d;
+  font-size:13px;
+}
+
+.status{
+  color:#58ee99;
+  font:600 10px Orbitron;
+}
+.status i{
+  display:inline-block;
+  width:7px;height:7px;
+  margin-right:6px;
+  border-radius:50%;
+  background:#4eff95;
+  box-shadow:0 0 9px #4eff95;
+}
+
+.cards{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:13px;
+}
+
+.card{
+  position:relative;
+  min-height:128px;
+  padding:17px;
+  border:1px solid #2b2933;
+  border-radius:15px;
+  background:linear-gradient(145deg,#17171f,#101017);
+  overflow:hidden;
+}
+
+.card:before{
+  content:"";
+  position:absolute;
+  left:0;top:0;bottom:0;
+  width:3px;
+  background:linear-gradient(#ff4b21,#9a36ff);
+  box-shadow:0 0 14px #ff4b2440;
+}
+
+.card h3{
+  margin:0 0 7px;
+  font:600 13px Orbitron;
+}
+.card p{
+  margin:0;
+  max-width:72%;
+  color:#898792;
+  font-size:12px;
+  line-height:1.35;
+}
+
+.action{
+  position:absolute;
+  right:14px;
+  top:14px;
+  min-width:75px;
+  padding:8px 10px;
+  border-radius:8px;
+  border:1px solid #3a3842;
+  background:#20202a;
+  color:#eee;
+  cursor:pointer;
+  font:600 9px Orbitron;
+}
+.action:hover{
+  border-color:#ff5a2c;
+  box-shadow:0 0 12px #ff4b2425;
+}
+
+.switch{
+  position:absolute;
+  right:14px;
+  top:14px;
+  width:48px;height:26px;
+  border:1px solid #44424d;
+  border-radius:20px;
+  background:#34343d;
+  cursor:pointer;
+}
+.switch i{
+  display:block;
+  width:20px;height:20px;
+  margin:2px;
+  border-radius:50%;
+  background:#f2f2f2;
+  transition:.16s;
+}
+.switch.on{
+  background:linear-gradient(90deg,#ff3618,#ff8500);
+  border-color:#ff6b32;
+  box-shadow:0 0 14px #ff4a2238;
+}
+.switch.on i{margin-left:24px}
+
+.note{
+  padding:14px;
+  margin-bottom:14px;
+  border:1px solid #ff5a1f2b;
+  border-radius:12px;
+  background:#ff5a1f08;
+  color:#aaa5af;
+  font-size:12px;
+}
+
+.empty{
+  height:370px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border:1px dashed #3b3944;
+  border-radius:16px;
+  background:#ffffff03;
+  color:#77747f;
+}
+.empty strong{
+  font:600 12px Orbitron;
+}
+
+.footer{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 15px;
+  color:#62606b;
+  border-top:1px solid #24232a;
+  font:600 8px Orbitron;
+}
+
+@media(max-width:760px){
+  .menu{width:97vw;height:94vh}
+  .body{grid-template-columns:72px 1fr}
+  .side-title,.nav span{display:none}
+  .nav{justify-content:center}
+  .cards{grid-template-columns:1fr}
+  .content{padding:17px}
+  .edition{display:none}
+  .brand strong{font-size:15px}
+  .headbtn{font-size:0;padding:10px}
+  .discord:after{content:"D";font-size:12px}
+  .youtube:after{content:"Y";font-size:12px}
+}
 </style>
 </head>
+
 <body>
-<div id="app">
-<div class="menu" id="menu">
-<header class="header" id="dragHandle">
-<div class="logo">KZN</div>
-<div class="brand"><h1>KZN <span>MENU</span></h1><span class="version">V1.0</span><span class="halloween">EDI&Ccedil;&Atilde;O HALLOWEEN</span></div>
-<div class="spacer"></div>
-<button class="hbtn discord">DISCORD</button><button class="hbtn youtube">YOUTUBE</button><button class="hbtn close" id="close">×</button>
+<div id="stage">
+<div class="menu">
+
+<header class="header">
+  <div class="logo">KZN</div>
+
+  <div class="brand">
+    <strong>KZN <span>MENU</span></strong>
+    <span class="version">V1.0</span>
+    <span class="edition">EDIÇÃO HALLOWEEN</span>
+  </div>
+
+  <div class="spacer"></div>
+
+  <button class="headbtn discord">DISCORD</button>
+  <button class="headbtn youtube">YOUTUBE</button>
+  <button class="headbtn close">×</button>
 </header>
 
-<main class="body">
+<div class="body">
+
 <aside class="sidebar">
 <div class="side-title">MENU</div>
-<button class="nav active" data-page="visual"><b class="icon">◉</b><span>VISUAL</span></button>
-<button class="nav" data-page="mods"><b class="icon">✦</b><span>MODS</span></button>
-<button class="nav" data-page="avatar"><b class="icon">◇</b><span>AVATAR</span></button>
-<button class="nav" data-page="combate"><b class="icon">✹</b><span>COMBATE</span></button>
-<button class="nav" data-page="teleportes"><b class="icon">⌖</b><span>TELEPORTES</span></button>
-<button class="nav" data-page="social"><b class="icon">◈</b><span>SOCIAL</span></button>
-<button class="nav" data-page="utilidades"><b class="icon">▣</b><span>UTILIDADES</span></button>
-<button class="nav" data-page="evento"><b class="icon">♢</b><span>EVENTO</span></button>
+
+<button class="nav active" data-page="visual"><b>◉</b><span>VISUAL</span></button>
+<button class="nav" data-page="mods"><b>✦</b><span>MODS</span></button>
+<button class="nav" data-page="avatar"><b>◇</b><span>AVATAR</span></button>
+<button class="nav" data-page="combate"><b>✹</b><span>COMBATE</span></button>
+<button class="nav" data-page="teleportes"><b>⌖</b><span>TELEPORTES</span></button>
+<button class="nav" data-page="social"><b>◈</b><span>SOCIAL</span></button>
+<button class="nav" data-page="utilidades"><b>▣</b><span>UTILIDADES</span></button>
+<button class="nav" data-page="evento"><b>♢</b><span>EVENTO</span></button>
 </aside>
 
 <section class="content">
-<div class="page active" id="visual"><div class="page-head"><div><h2>VISUAL</h2><p>Recursos visuais do KZN MENU</p></div><div class="online"><i></i>ONLINE</div></div>
+
+<!-- VISUAL -->
+<div class="page active" id="visual">
+<div class="page-title">
+<div><h2>VISUAL</h2><p>Recursos visuais do KZN MENU</p></div>
+<div class="status"><i></i>ONLINE</div>
+</div>
+
 <div class="cards">
-<div class="card"><button class="toggle"><i></i></button><h3>ESP PLAYER</h3><p>Mostra players com linha RGB.</p></div>
-<div class="card"><button class="toggle"><i></i></button><h3>ESP ADMIN</h3><p>Detecta administradores invis&iacute;veis.</p></div>
-<div class="card"><button class="toggle"><i></i></button><h3>ESP LOOT</h3><p>Destaca loot e ba&uacute;s.</p></div>
-<div class="card"><button class="toggle"><i></i></button><h3>ESP INSETOS</h3><p>Detector visual de insetos.</p></div>
-</div></div>
 
-<div class="page" id="mods"><div class="page-head"><div><h2>MODS</h2><p>Recursos de modifica&ccedil;&atilde;o</p></div></div><div class="cards">
-<div class="card"><button class="toggle"><i></i></button><h3>NOCLIP</h3><p>Controle de movimenta&ccedil;&atilde;o.</p></div>
-<div class="card"><button class="toggle"><i></i></button><h3>GOD MODE</h3><p>Op&ccedil;&atilde;o de prote&ccedil;&atilde;o.</p></div>
-<div class="card"><button class="toggle"><i></i></button><h3>RGB BODY</h3><p>Efeito visual no personagem.</p></div>
-<div class="card"><button class="toggle"><i></i></button><h3>TRANSLATOR</h3><p>Interface de tradu&ccedil;&atilde;o.</p></div>
-</div></div>
+<div class="card">
+<button class="switch"><i></i></button>
+<h3>ESP PLAYER</h3>
+<p>Mostra os players com linha RGB.</p>
+</div>
 
-<div class="page" id="avatar"><div class="page-head"><div><h2>AVATAR</h2><p>Recursos relacionados ao avatar</p></div></div><div class="cards"><div class="card"><h3>AVATAR</h3><p>Painel reservado para recursos do avatar.</p></div><div class="card"><h3>CUSTOMIZA&Ccedil;&Atilde;O</h3><p>Configura&ccedil;&otilde;es visuais.</p></div></div></div>
+<div class="card">
+<button class="switch"><i></i></button>
+<h3>ESP ADMIN</h3>
+<p>Detecta administradores invisíveis.</p>
+</div>
 
-<div class="page" id="combate"><div class="page-head"><div><h2>COMBATE</h2><p>Recursos de combate</p></div></div><div class="cards"><div class="card"><button class="toggle"><i></i></button><h3>STRIKE</h3><p>Recurso de combate.</p></div><div class="card"><button class="toggle"><i></i></button><h3>EXPLODE</h3><p>Recurso de explos&atilde;o.</p></div></div></div>
+<div class="card">
+<button class="switch"><i></i></button>
+<h3>ESP INSETOS</h3>
+<p>Detector visual de insetos com linha e contador.</p>
+</div>
 
-<div class="page" id="teleportes"><div class="page-head"><div><h2>TELEPORTES</h2><p>Locais e movimenta&ccedil;&atilde;o</p></div></div><div class="cards"><div class="card"><h3>GRAAL CITY</h3><p>Atalho visual para teleporte.</p></div><div class="card"><h3>LOOT</h3><p>Op&ccedil;&otilde;es de localiza&ccedil;&atilde;o.</p></div></div></div>
+<div class="card">
+<button class="switch"><i></i></button>
+<h3>ESP LOOT</h3>
+<p>Visualização de loot e objetos.</p>
+</div>
 
-<div class="page" id="social"><div class="page-head"><div><h2>SOCIAL</h2><p>Recursos sociais</p></div></div><div class="cards"><div class="card"><h3>SHOUT</h3><p>Ferramentas de comunica&ccedil;&atilde;o.</p></div><div class="card"><h3>REACT</h3><p>Rea&ccedil;&otilde;es e intera&ccedil;&otilde;es.</p></div></div></div>
+<div class="card">
+<button class="switch"><i></i></button>
+<h3>ANTI-REPOR</h3>
+<p>Recurso visual já existente no menu.</p>
+</div>
 
-<div class="page" id="utilidades"><div class="page-head"><div><h2>UTILIDADES</h2><p>Configura&ccedil;&otilde;es do painel</p></div></div>
-<div class="settings"><div class="setting"><h3>LARGURA DO MENU</h3><input class="range" type="range" min="760" max="1200" value="1080"></div>
-<div class="setting"><h3>COR DO MENU</h3><div class="colors"><button class="color c1"></button><button class="color c2"></button><button class="color c3"></button><button class="color c4"></button><button class="color c5"></button><button class="color c6"></button><button class="color c7"></button><button class="color c8"></button><button class="color c9"></button><button class="color c10"></button><button class="color c11"></button><button class="color c12"></button></div></div></div></div>
+</div>
+</div>
 
-<div class="page" id="evento"><div class="page-head"><div><h2>EVENTO</h2><p>EDI&Ccedil;&Atilde;O HALLOWEEN</p></div></div><div class="empty"><strong>EVENTO — CONTE&Uacute;DO EM BREVE</strong></div></div>
+<!-- MODS -->
+<div class="page" id="mods">
+<div class="page-title"><div><h2>MODS</h2><p>Recursos que já fazem parte do KZN MENU</p></div></div>
+<div class="cards">
+
+<div class="card"><button class="switch"><i></i></button><h3>NOCLIP</h3><p>Controle de movimentação noclip.</p></div>
+<div class="card"><button class="switch"><i></i></button><h3>GOD MODE</h3><p>Modo de proteção do personagem.</p></div>
+<div class="card"><button class="switch"><i></i></button><h3>COPY UP</h3><p>Recurso Copy Up do menu.</p></div>
+<div class="card"><button class="switch"><i></i></button><h3>LOOP UP</h3><p>Recurso Loop Up do menu.</p></div>
+<div class="card"><button class="switch"><i></i></button><h3>RGB BODY</h3><p>Efeito RGB no personagem.</p></div>
+<div class="card"><button class="switch"><i></i></button><h3>ANTI FILTER WORDS</h3><p>Recurso Anti Filter Words.</p></div>
+
+</div>
+</div>
+
+<!-- AVATAR -->
+<div class="page" id="avatar">
+<div class="page-title"><div><h2>AVATAR</h2><p>Recursos de avatar já existentes</p></div></div>
+<div class="cards">
+<div class="card"><button class="action">ABRIR</button><h3>AVATAR</h3><p>Recursos relacionados ao avatar do seu menu.</p></div>
+<div class="card"><button class="action">ABRIR</button><h3>MORPHS</h3><p>Área para os Morphs já existentes.</p></div>
+</div>
+</div>
+
+<!-- COMBATE -->
+<div class="page" id="combate">
+<div class="page-title"><div><h2>COMBATE</h2><p>Funções de combate existentes no menu</p></div></div>
+<div class="cards">
+<div class="card"><button class="action">EXECUTAR</button><h3>EXPLODE</h3><p>Recurso Explode.</p></div>
+<div class="card"><button class="action">EXECUTAR</button><h3>STRIKE</h3><p>Recurso Strike.</p></div>
+<div class="card"><button class="switch"><i></i></button><h3>BOMB INFINITE</h3><p>Recurso de bomba infinita.</p></div>
+<div class="card"><button class="action">EXECUTAR</button><h3>NUKE</h3><p>Recursos Nuke existentes.</p></div>
+</div>
+</div>
+
+<!-- TELEPORTES -->
+<div class="page" id="teleportes">
+<div class="page-title"><div><h2>TELEPORTES</h2><p>Funções de teleporte do menu</p></div></div>
+<div class="cards">
+<div class="card"><button class="action">EXECUTAR</button><h3>TP GRAAL CITY</h3><p>Teleporte para Graal City.</p></div>
+<div class="card"><button class="action">EXECUTAR</button><h3>TP LOOT</h3><p>Teleporte relacionado ao loot.</p></div>
+<div class="card"><button class="action">EXECUTAR</button><h3>TP GRALATS</h3><p>Teleporte relacionado a Gralats.</p></div>
+<div class="card"><button class="action">EXECUTAR</button><h3>WARP</h3><p>Recurso Warp.</p></div>
+</div>
+</div>
+
+<!-- SOCIAL -->
+<div class="page" id="social">
+<div class="page-title"><div><h2>SOCIAL</h2><p>Recursos sociais do KZN MENU</p></div></div>
+<div class="cards">
+<div class="card"><button class="action">ABRIR</button><h3>SHOUT</h3><p>Recurso Shout.</p></div>
+<div class="card"><button class="action">ABRIR</button><h3>REACT</h3><p>Recurso React.</p></div>
+<div class="card"><button class="action">ABRIR</button><h3>SPAM CHAT</h3><p>Recurso Spam Chat.</p></div>
+<div class="card"><button class="action">ABRIR</button><h3>TYPEWRITER</h3><p>Modo Typewriter.</p></div>
+</div>
+</div>
+
+<!-- UTILIDADES -->
+<div class="page" id="utilidades">
+<div class="page-title"><div><h2>UTILIDADES</h2><p>Ferramentas e configurações existentes</p></div></div>
+<div class="cards">
+<div class="card"><button class="action">ABRIR</button><h3>TRADUTOR</h3><p>Tradutor English ↔ Português.</p></div>
+<div class="card"><button class="action">ABRIR</button><h3>CONFIGURAÇÕES</h3><p>Configurações do menu.</p></div>
+<div class="card"><button class="action">ABRIR</button><h3>SUMMON</h3><p>Recurso Summon.</p></div>
+<div class="card"><button class="action">ABRIR</button><h3>EFEITOS</h3><p>Área de efeitos já existente.</p></div>
+</div>
+</div>
+
+<!-- EVENTO -->
+<div class="page" id="evento">
+<div class="page-title"><div><h2>EVENTO</h2><p>EDIÇÃO HALLOWEEN</p></div></div>
+<div class="empty"><strong>EVENTO HALLOWEEN — CONTEÚDO EM BREVE</strong></div>
+</div>
+
 </section>
-</main>
-<footer class="footer"><span>KZN MENU • EDI&Ccedil;&Atilde;O HALLOWEEN</span><span>PREVIEW HTML</span></footer>
+</div>
+
+<footer class="footer">
+<span>KZN MENU • EDIÇÃO HALLOWEEN</span>
+<span>HTML PREVIEW • SEM FUNÇÕES GS2</span>
+</footer>
+
 </div>
 </div>
 
 <script>
-const navs=[...document.querySelectorAll('.nav')];
-const pages=[...document.querySelectorAll('.page')];
-navs.forEach(n=>n.addEventListener('click',()=>{
- navs.forEach(x=>x.classList.remove('active')); n.classList.add('active');
- pages.forEach(p=>p.classList.toggle('active',p.id===n.dataset.page));
-}));
-document.querySelectorAll('.toggle').forEach(t=>t.addEventListener('click',()=>t.classList.toggle('on')));
+/* Navegação entre as pastas */
+const navs = document.querySelectorAll(".nav");
+const pages = document.querySelectorAll(".page");
 
-// Drag sem deformar o painel.
-const menu=document.getElementById('menu'), handle=document.getElementById('dragHandle');
-let dragging=false,dx=0,dy=0;
-handle.addEventListener('pointerdown',e=>{
- if(e.target.closest('button')) return;
- dragging=true; handle.setPointerCapture(e.pointerId);
- const r=menu.getBoundingClientRect(); dx=e.clientX-r.left; dy=e.clientY-r.top;
- menu.style.position='fixed'; menu.style.left=r.left+'px'; menu.style.top=r.top+'px'; menu.style.margin='0';
+navs.forEach(nav=>{
+  nav.addEventListener("click",()=>{
+    navs.forEach(n=>n.classList.remove("active"));
+    pages.forEach(p=>p.classList.remove("active"));
+
+    nav.classList.add("active");
+    document.getElementById(nav.dataset.page).classList.add("active");
+  });
 });
-handle.addEventListener('pointermove',e=>{
- if(!dragging)return;
- const x=Math.max(0,Math.min(innerWidth-menu.offsetWidth,e.clientX-dx));
- const y=Math.max(0,Math.min(innerHeight-menu.offsetHeight,e.clientY-dy));
- menu.style.left=x+'px';menu.style.top=y+'px';
+
+/* Apenas demonstração visual dos toggles */
+document.querySelectorAll(".switch").forEach(sw=>{
+  sw.addEventListener("click",()=>{
+    sw.classList.toggle("on");
+  });
 });
-handle.addEventListener('pointerup',()=>dragging=false);
 
-// Botão fechar: apenas visual.
-document.getElementById('close').addEventListener('click',()=>menu.style.visibility='hidden');
-
-// URLs ficam centralizadas aqui para você substituir pelas suas.
-const AUDIO_ATIVAR_GITHUB = "";
-const AUDIO_DESATIVAR_GITHUB = "";
-function playGitHubAudio(url){
- if(!url)return;
- const a=new Audio(url); a.volume=.7; a.play().catch(()=>{});
-}
-// Exemplo para integrar depois:
-// playGitHubAudio(AUDIO_ATIVAR_GITHUB);
-// playGitHubAudio(AUDIO_DESATIVAR_GITHUB);
+/* Botões demonstrativos não executam funções GS2 nesta versão HTML */
+document.querySelectorAll(".action").forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    btn.textContent = "OK";
+    setTimeout(()=>btn.textContent="EXECUTAR",600);
+  });
+});
 </script>
 </body>
 </html>
