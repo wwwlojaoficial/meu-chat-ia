@@ -105,6 +105,67 @@ a{text-decoration:none;color:inherit}button,input,textarea,select{font:inherit}.
   body{padding-bottom:72px}
 }
 
+
+/* ASPEC SERVERS — MOBILE REFINEMENT */
+@media(max-width:700px){
+  body{padding-bottom:0;background:radial-gradient(circle at 50% -12%,#5865f220,transparent 32%),var(--bg);overflow-x:hidden}
+  .container{width:calc(100% - 24px);max-width:none}
+  .nav{position:sticky;top:0;z-index:120;background:#09080ff2;backdrop-filter:blur(18px);padding:9px 0 10px;border-bottom:1px solid #ffffff0d}
+  .navin{display:grid;grid-template-columns:auto 1fr auto;grid-template-rows:42px 42px;gap:8px;min-height:0;padding:0}
+  .brand{grid-column:1;grid-row:1;min-width:0;display:flex;align-items:center;gap:8px}
+  .logo{width:38px;height:38px;border-radius:12px;flex:none}
+  .brand span{display:none}
+  .navlinks{display:none}
+  .nav-actions{grid-column:2 / 4;grid-row:1;display:flex;align-items:center;justify-content:flex-end;gap:6px;margin:0}
+  .nav-actions .icon-btn{display:none}
+  .account-btn{height:38px;padding:0 11px;font-size:10px;border-radius:11px;white-space:nowrap}
+  .nav-actions .add{height:38px;padding:0 12px;font-size:10px;border-radius:11px;white-space:nowrap}
+  .search{grid-column:1 / 4;grid-row:2;width:100%;max-width:none;margin:0}
+  .search input{height:42px;border-radius:12px;font-size:13px;padding:0 45px 0 13px;background:#0e0d15}
+  .search button{right:4px;top:4px;width:34px;height:34px;border-radius:10px}
+  .hero{padding:26px 0 16px}
+  .hero-grid{display:block}
+  .hero-art{display:none}
+  .badge{font-size:9px;padding:7px 10px;max-width:max-content}
+  h1{font-size:clamp(31px,8.8vw,38px);line-height:1.04;letter-spacing:-1.6px;margin:14px 0 0;max-width:100%}
+  .hero p{font-size:13px;line-height:1.48;margin:13px 0 16px;max-width:100%}
+  .actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .actions .btn{width:100%;min-height:44px;padding:10px 8px;font-size:11px;border-radius:12px}
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin:12px 0 0}
+  .stat{min-width:0;padding:11px 5px;border-radius:13px;text-align:center}
+  .stat strong{font-size:20px;line-height:1}
+  .stat span{font-size:7px;line-height:1.2;margin-top:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .section{padding:25px 0}
+  .head{margin-bottom:11px}
+  .head p{font-size:9px}
+  h2{font-size:22px;letter-spacing:-.7px}
+  .catbar{padding:9px 10px;border-radius:12px}
+  .catbar strong{font-size:10px}
+  .catgrid{grid-template-columns:repeat(2,1fr);gap:7px}
+  .cat{min-height:48px;padding:8px}
+  .filterbar{padding:8px;border-radius:12px}
+  .filters{grid-template-columns:1fr 1fr;gap:7px}
+  .server-grid{grid-template-columns:1fr;gap:9px}
+  .server{padding:13px;border-radius:14px}
+  .vip-grid{grid-template-columns:1fr;gap:9px}
+  .cta{padding:18px;border-radius:14px}
+  .footer{padding-bottom:25px}
+  .toast{left:10px;right:10px;bottom:12px;font-size:11px;line-height:1.35;text-align:center}
+}
+@media(max-width:430px){
+  .container{width:calc(100% - 20px)}
+  .navin{grid-template-columns:40px 1fr auto}
+  .account-btn{max-width:110px;overflow:hidden;text-overflow:ellipsis}
+  .nav-actions .add{padding:0 10px}
+  h1{font-size:32px}
+  .hero p{font-size:12.5px}
+  .actions{grid-template-columns:1fr}
+  .actions .btn{min-height:42px}
+  .stats{gap:5px}
+  .stat{padding:10px 3px}
+  .stat strong{font-size:18px}
+  .stat span{font-size:7px}
+}
 </style>
 </head>
 <body>
@@ -215,11 +276,12 @@ a{text-decoration:none;color:inherit}button,input,textarea,select{font:inherit}.
 
 <script type="module">
 import {initializeApp} from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
-import {getAuth,GoogleAuthProvider,signInWithPopup,signInWithRedirect,getRedirectResult,signOut,onAuthStateChanged} from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
+import {getAuth,GoogleAuthProvider,signInWithPopup,signOut,onAuthStateChanged} from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
 import {getDatabase,ref,set,push,onValue,update,remove,onDisconnect,serverTimestamp} from "https://www.gstatic.com/firebasejs/12.4.0/firebase-database.js";
 
 const firebaseConfig={apiKey:"AIzaSyCz8MApnOq4j8b5b6jtDFTg_1ECVZuernw",authDomain:"aspecservers.firebaseapp.com",databaseURL:"https://aspecservers-default-rtdb.firebaseio.com",projectId:"aspecservers",storageBucket:"aspecservers.firebasestorage.app",messagingSenderId:"891157195012",appId:"1:891157195012:web:ba9f45b14e6008f53fc851",measurementId:"G-JE7H4EMT0X"};
 const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getDatabase(app),provider=new GoogleAuthProvider();
+console.info("ASPEC Firebase project:",firebaseConfig.projectId,"authDomain:",firebaseConfig.authDomain);
 const ASPEC_LOGO="https://yt3.googleusercontent.com/CAVDm1UX71fycuauq8Pt3qCj3oEIg90ubYY0EKhA7ftDWmDS8v5iv4FEtsJ_nwf05MbRZC590A=s160-c-k-c0x00ffffff-no-rj";
 const categories=["Games","Comunidade","Conversa","Brasil","Social","Call","Roblox","Resenha","Anime","Panela","Gamer","RPG","Minecraft","Música","Chat","Memes","Loja","Programação","Filmes","YouTube","Arte","Futebol","Estudos","Sorteios","Bots","Free Fire","Genshin","Valorant","Roleplay","Tecnologia","K-Pop","Literatura","Geek","FiveM","Pokémon","Debate","Streaming","Design","Parcerias","Amizade","Diversão","Bate-papo"];
 const icons=["🎮","👥","💬","🇧🇷","🗣️","📞","🤖","⭐","🌸","🍳","🎯","🎲","⛏️","🎵","💬","😂","🛒","💻","🎬","📺","🎨","⚽","📚","🎁","🤖","🔥","💜","🏆","🎭","💡","🎤","📖","🧩","🏎️","🃏","🧠","🎥","🧑‍💻","🤝","👋","🎉","💬"];
@@ -239,31 +301,31 @@ window.openNotifications=()=>{if(!currentUser){login();return}renderNotification
 window.openAccount=()=>{if(!currentUser){login();return}renderAccount();openModal("accountModal")};
 
 $("accountBtn").onclick=()=>currentUser?openAccount():login();
+let googleLoginBusy=false;
 async function login(){
+  if(googleLoginBusy)return;
+  googleLoginBusy=true;
   try{
-    const mobile=window.matchMedia("(max-width: 700px)").matches;
-    if(mobile){
-      await signInWithRedirect(auth,provider);
-      return;
-    }
+    provider.setCustomParameters({prompt:"select_account"});
     await signInWithPopup(auth,provider);
   }catch(e){
     console.error("Google Auth:",e);
+    const code=e?.code||"desconhecido";
     const msg={
       "auth/unauthorized-domain":"Este domínio não está autorizado no Firebase Authentication.",
-      "auth/popup-blocked":"O navegador bloqueou a janela do Google. Tente novamente.",
+      "auth/popup-blocked":"O navegador bloqueou o login do Google. Permita pop-ups para este site e tente novamente.",
       "auth/popup-closed-by-user":"Login cancelado.",
-      "auth/cancelled-popup-request":"O login anterior ainda está em andamento."
-    }[e.code] || "Não foi possível entrar com Google. Código: "+(e.code||"desconhecido");
+      "auth/cancelled-popup-request":"O login anterior ainda está em andamento.",
+      "auth/popup-operation-not-supported-in-this-environment":"O navegador não permite a janela de login do Google neste ambiente.",
+      "auth/operation-not-allowed":"O login com Google ainda não está ativado no Firebase Authentication.",
+      "auth/invalid-api-key":"A API Key do Firebase foi recusada. Verifique a configuração do app Web no Firebase.",
+      "auth/api-key-not-valid":"O Firebase recusou a API Key deste aplicativo Web. A chave precisa ser a chave atual mostrada em Configuração do SDK > Config do app ASPEC SERVERS."
+    }[code] || "Não foi possível entrar com Google. Código: "+code;
     toast(msg);
+  }finally{
+    googleLoginBusy=false;
   }
 }
-getRedirectResult(auth).catch(e=>{
-  if(e && e.code && e.code!=="auth/no-current-user"){
-    console.error("Google Redirect:",e);
-    toast(e.code==="auth/unauthorized-domain"?"Este domínio não está autorizado no Firebase Authentication.":"Falha no retorno do Google: "+e.code);
-  }
-});
 window.logout=()=>signOut(auth).then(()=>toast("Você saiu da conta."));
 function setupCats(){
  $("catgrid").innerHTML=`<button class="cat active" onclick="chooseCat('Todos',this)"><span class="ico">✦</span><strong>Todos</strong></button>`+categories.map((c,i)=>`<button class="cat" onclick="chooseCat(${JSON.stringify(c)},this)"><span class="ico">${icons[i]}</span><strong>${esc(c)}</strong></button>`).join("");
